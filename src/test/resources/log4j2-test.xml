@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%-5p %d [%t] %c: %m%n"/>
+        </Console>
+    </Appenders>
+
+    <Loggers>
+
+		<!-- make the two test servers silent -->
+        <AsyncLogger name="org.apache.ftpserver" level="ERROR"/>
+        <AsyncLogger name="org.apache.mina" level="ERROR"/>
+        <AsyncLogger name="org.apache.sshd.server" level="ERROR"/>
+        <AsyncLogger name="org.mule.modules.ftpclient.sftpserver" level="ERROR"/>
+
+        <AsyncRoot level="INFO">
+            <AppenderRef ref="Console"/>
+        </AsyncRoot>
+    </Loggers>
+
+</Configuration>
