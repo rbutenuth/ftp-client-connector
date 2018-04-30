@@ -17,7 +17,7 @@ public class FtpRenameTest extends AbstractFtpClientTest {
         FtpClientConnector connector = connectorFactory.createConnector(TransferMode.Ascii, true);
 
         fileManager.createTextFile(new File(fileManager.getDirectory(), "foo.txt"), HELLO);
-        connector.rename("", "foo.txt", "", "bar.txt");
+        connector.rename("", "foo.txt", "bar.txt");
 
         String content = fileManager.readTextFile(new File(fileManager.getDirectory(), "bar.txt"));
         assertEquals(HELLO, content);
@@ -29,7 +29,7 @@ public class FtpRenameTest extends AbstractFtpClientTest {
         FtpClientConnector connector = connectorFactory.createConnector(TransferMode.Ascii, true);
 
         fileManager.createTextFile(new File(fileManager.getDirectory(), "foo.txt"), HELLO);
-        connector.rename("", "foo.txt", "/nonexisting", "bar.txt");
+        connector.rename("", "foo.txt", "/nonexisting/bar.txt");
     }
 
     @Test
@@ -40,7 +40,7 @@ public class FtpRenameTest extends AbstractFtpClientTest {
         fileManager.createTextFile(new File(fileManager.getDirectory(), "foo.txt"), HELLO);
         File subdir = new File(fileManager.getDirectory(), "subdir");
         assertTrue(subdir.mkdirs());
-        connector.rename("", "foo.txt", "subdir", "bar.txt");
+        connector.rename("", "foo.txt", "subdir/bar.txt");
 
         String content = fileManager.readTextFile(new File(subdir, "bar.txt"));
         assertEquals(HELLO, content);

@@ -138,12 +138,12 @@ public abstract class AbstractConfig<W extends ClientWrapper> {
         return fileList;
     }
 
-    public void rename(String originalDirectory, String originalFilename, String newDirectory, String newFilename)
+    public void rename(String originalDirectory, String originalFilename, String newFilename)
             throws Exception {
         final W client = clientPool.borrowObject();
         try {
             client.changeWorkingDirectory(originalDirectory, false);
-            String toCompletePath = createCompletePath(newDirectory, newFilename);
+            String toCompletePath = ClientWrapper.normalize(newFilename);
             client.move(originalFilename, toCompletePath);
             clientPool.returnObject(client);
         } catch (Exception e) {

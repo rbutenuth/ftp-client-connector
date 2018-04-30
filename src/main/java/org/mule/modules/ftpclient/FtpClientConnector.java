@@ -127,7 +127,7 @@ public class FtpClientConnector {
             @FriendlyName("Regex for filename") @Default(".*") String filename, //
             @FriendlyName("File to read instead of matched") @Default("") @Literal String translatedNameExpression, //
             @FriendlyName("Delete original file after get") @Default("false") boolean deleteAfterGet, //
-            @FriendlyName("Move to Directory") String moveToDirectory, //
+            @FriendlyName("Move to Directory (relative)") String moveToDirectory, //
             @FriendlyName("Streaming") @Default("true") boolean streaming, //
             SourceCallback callback) {
 
@@ -414,8 +414,6 @@ public class FtpClientConnector {
      *            Original directory
      * @param originalFilename
      *            Original file name
-     * @param newDirectory
-     *            New directory, relative to originalDirectory
      * @param newFilename
      *            New file name
      * @throws Exception 
@@ -424,9 +422,8 @@ public class FtpClientConnector {
     @Processor
     public void rename(@FriendlyName("Original directory") @Default("") String originalDirectory, //
             @FriendlyName("Original file name") String originalFilename,
-            @FriendlyName("New dir. (rel. to original)") @Default("") String newDirectory, //
-            @FriendlyName("New file name") String newFilename) throws Exception {
-        config.rename(originalDirectory, originalFilename, newDirectory, newFilename);
+            @FriendlyName("New file name (with relative directory)") String newFilename) throws Exception {
+        config.rename(originalDirectory, originalFilename, newFilename);
     }
 
     @SuppressWarnings("unchecked")
