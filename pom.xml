@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.codecentric.mule.modules</groupId>
 	<artifactId>ftp-client-connector</artifactId>
-	<version>0.0.1</version>
+	<version>0.0.2-SNAPSHOT</version>
 	<packaging>mule-module</packaging>
 	<name>ftp-client-connector</name>
 	<description>A Mule connector for ftp/sftp.</description>
