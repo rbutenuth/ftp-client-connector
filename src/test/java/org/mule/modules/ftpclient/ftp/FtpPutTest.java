@@ -14,6 +14,7 @@ import org.mule.api.transport.OutputHandler;
 import org.mule.modules.ftpclient.FtpClientConnector;
 import org.mule.modules.ftpclient.config.TransferMode;
 import org.mule.modules.ftpclient.util.SimpleMock;
+import org.mule.transport.NullPayload;
 
 public class FtpPutTest extends AbstractFtpClientTest {
 
@@ -108,6 +109,26 @@ public class FtpPutTest extends AbstractFtpClientTest {
         connector.putFile("", "test.bin", new ByteArrayInputStream(written), null);
         byte[] read = fileManager.readBinaryFile(new File(fileManager.getDirectory(), "test.bin"));
         assertArrayEquals(written, read);
+        assertEquals(0, connector.getConfig().getActiveConnections());
+    }
+
+    @Test
+    public void putWithNullShouldCreateEmptyFile() throws Exception {
+        byte[] written = null;
+        FtpClientConnector connector = connectorFactory.createConnector(TransferMode.Binary, true);
+        connector.putFile("", "test.bin", written, null);
+        byte[] read = fileManager.readBinaryFile(new File(fileManager.getDirectory(), "test.bin"));
+        assertEquals(0, read.length);
+        assertEquals(0, connector.getConfig().getActiveConnections());
+    }
+
+    @Test
+    public void putWithNullPayloadShouldCreateEmptyFile() throws Exception {
+        Object written = NullPayload.getInstance();
+        FtpClientConnector connector = connectorFactory.createConnector(TransferMode.Binary, true);
+        connector.putFile("", "test.bin", written, null);
+        byte[] read = fileManager.readBinaryFile(new File(fileManager.getDirectory(), "test.bin"));
+        assertEquals(0, read.length);
         assertEquals(0, connector.getConfig().getActiveConnections());
     }
 

@@ -82,7 +82,7 @@ public class FtpClientConnector {
             @FriendlyName("File to read instead of matched") @Default("") @Literal String translatedNameExpression, //
             @FriendlyName("Delete after get") @Default("false") boolean deleteAfterGet, //
             @FriendlyName("Streaming") @Default("true") boolean streaming, //
-            SourceCallback callback) {
+            SourceCallback callback) throws RuntimeException { // throws needed, otherwise DevKit generates illegal code
 
         CompletionStrategy cs = new DeleteOrNothingStrategy(deleteAfterGet);
         handlePoll(cs, directory, filename, translatedNameExpression, streaming, callback);
@@ -129,7 +129,7 @@ public class FtpClientConnector {
             @FriendlyName("Delete original file after get") @Default("false") boolean deleteAfterGet, //
             @FriendlyName("Move to Directory (relative)") String moveToDirectory, //
             @FriendlyName("Streaming") @Default("true") boolean streaming, //
-            SourceCallback callback) {
+            SourceCallback callback) throws RuntimeException { // throws needed, otherwise DevKit generates illegal code
 
         String dir = moveToDirectory.trim();
         if (dir.endsWith("/")) {
@@ -181,7 +181,7 @@ public class FtpClientConnector {
             @FriendlyName("Expression for renaming filename") @Literal String filenameExpression, //
             @FriendlyName("Expression for renaming originalFilename") @Literal String originalFilenameExpression, //
             @FriendlyName("Streaming") @Default("true") boolean streaming, //
-            SourceCallback callback) {
+            SourceCallback callback) throws RuntimeException { // throws needed, otherwise DevKit generates illegal code
 
         CompletionStrategy cs = new RenameStrategy(muleContext, filenameExpression, originalFilenameExpression);
         handlePoll(cs, directory, filename, translatedNameExpression, streaming, callback);
@@ -337,7 +337,9 @@ public class FtpClientConnector {
                 ((OutputHandler) content).write(event, out);
             } else {
                 byte[] dataBytes;
-                if (content instanceof byte[]) {
+                if (content == null || content instanceof NullPayload) {
+                    dataBytes = new byte[0];
+                } else if (content instanceof byte[]) {
                     dataBytes = (byte[]) content;
                 } else {
                     dataBytes = content.toString().getBytes(event.getEncoding());
