@@ -29,7 +29,7 @@ When you use Maven: Released versions of the connector are on Maven Central, so 
 * [Connection configuration](https://github.com/rbutenuth/ftp-client-connector/blob/master/docs/connection.md)
 * [Polling](https://github.com/rbutenuth/ftp-client-connector/blob/master/docs/polling.md)
 * [Put, Get](https://github.com/rbutenuth/ftp-client-connector/blob/master/docs/put-and-get.md)
-* [List, Delete](https://github.com/rbutenuth/ftp-client-connector/blob/master/docs/list-delete-rename.md)
+* [List, Delete, Rename](https://github.com/rbutenuth/ftp-client-connector/blob/master/docs/list-delete-rename.md)
 
 ## CI
 
