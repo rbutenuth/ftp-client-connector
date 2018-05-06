@@ -35,9 +35,9 @@ When you use Maven: Released versions of the connector are on Maven Central, so 
 
 https://travis-ci.org/rbutenuth/ftp-client-connector
 
-## Maven Site
+## Coverage
 
-[Site](https://rbutenuth.github.io/ftp-client-connector/site/index.html)
+[Cobertura report](https://rbutenuth.github.io/ftp-client-connector/site/cobertura/index.html)
 
 ## Reporting Issues
 

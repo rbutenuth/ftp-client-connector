@@ -2,23 +2,36 @@
 <?metadataRepository version='1.1.0'?>
 <repository name='file:/C:/java/mule/workspace/ftp-client-connector/target/update-site/ - metadata' type='org.eclipse.equinox.internal.p2.metadata.repository.LocalMetadataRepository' version='1.0.0'>
   <properties size='2'>
-    <property name='p2.timestamp' value='1525286661708'/>
+    <property name='p2.timestamp' value='1525634441189'/>
     <property name='p2.compressed' value='false'/>
   </properties>
   <units size='4'>
-    <unit id='org.mule.tooling.ui.extension.ftp-client-connector.3.5.0.feature.group' version='0.0.2.201805022042' singleton='false'>
-      <update id='org.mule.tooling.ui.extension.ftp-client-connector.3.5.0.feature.group' range='[0.0.0,0.0.2.201805022042)' severity='0'/>
+    <unit id='file:/C:/java/mule/workspace/ftp-client-connector/target/classes/category.xml.de.codecentric.mule.modules' version='1.0.0.2--cKMydJ7735I3C3E755I'>
+      <properties size='2'>
+        <property name='org.eclipse.equinox.p2.name' value='Community'/>
+        <property name='org.eclipse.equinox.p2.type.category' value='true'/>
+      </properties>
+      <provides size='1'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='file:/C:/java/mule/workspace/ftp-client-connector/target/classes/category.xml.de.codecentric.mule.modules' version='1.0.0.2--cKMydJ7735I3C3E755I'/>
+      </provides>
+      <requires size='1'>
+        <required namespace='org.eclipse.equinox.p2.iu' name='org.mule.tooling.ui.extension.ftp-client-connector.3.5.0.feature.group' range='[1.0.0.201805062118,1.0.0.201805062118]'/>
+      </requires>
+      <touchpoint id='null' version='0.0.0'/>
+    </unit>
+    <unit id='org.mule.tooling.ui.extension.ftp-client-connector.3.5.0.feature.group' version='1.0.0.201805062118' singleton='false'>
+      <update id='org.mule.tooling.ui.extension.ftp-client-connector.3.5.0.feature.group' range='[0.0.0,1.0.0.201805062118)' severity='0'/>
       <properties size='3'>
         <property name='org.eclipse.equinox.p2.name' value='FTP/SFTP Connector (Mule 3.5.0+)'/>
         <property name='org.eclipse.equinox.p2.provider' value='Mulesoft, Inc.'/>
         <property name='org.eclipse.equinox.p2.type.group' value='true'/>
       </properties>
       <provides size='1'>
-        <provided namespace='org.eclipse.equinox.p2.iu' name='org.mule.tooling.ui.extension.ftp-client-connector.3.5.0.feature.group' version='0.0.2.201805022042'/>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='org.mule.tooling.ui.extension.ftp-client-connector.3.5.0.feature.group' version='1.0.0.201805062118'/>
       </provides>
       <requires size='2'>
-        <required namespace='org.eclipse.equinox.p2.iu' name='org.mule.tooling.ui.contribution.ftp-client.3.5.0' range='[0.0.2.201805022042,0.0.2.201805022042]'/>
-        <required namespace='org.eclipse.equinox.p2.iu' name='org.mule.tooling.ui.extension.ftp-client-connector.3.5.0.feature.jar' range='[0.0.2.201805022042,0.0.2.201805022042]'>
+        <required namespace='org.eclipse.equinox.p2.iu' name='org.mule.tooling.ui.contribution.ftp-client.3.5.0' range='[1.0.0.201805062118,1.0.0.201805062118]'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='org.mule.tooling.ui.extension.ftp-client-connector.3.5.0.feature.jar' range='[1.0.0.201805062118,1.0.0.201805062118]'>
           <filter>
             (org.eclipse.update.install.features=true)
           </filter>
@@ -31,14 +44,14 @@
         </license>
       </licenses>
     </unit>
-    <unit id='org.mule.tooling.ui.contribution.ftp-client.3.5.0' version='0.0.2.201805022042'>
-      <update id='org.mule.tooling.ui.contribution.ftp-client.3.5.0' range='[0.0.0,0.0.2.201805022042)' severity='0'/>
+    <unit id='org.mule.tooling.ui.contribution.ftp-client.3.5.0' version='1.0.0.201805062118'>
+      <update id='org.mule.tooling.ui.contribution.ftp-client.3.5.0' range='[0.0.0,1.0.0.201805062118)' severity='0'/>
       <properties size='1'>
         <property name='org.eclipse.equinox.p2.name' value='FTP/SFTP'/>
       </properties>
       <provides size='3'>
-        <provided namespace='org.eclipse.equinox.p2.iu' name='org.mule.tooling.ui.contribution.ftp-client.3.5.0' version='0.0.2.201805022042'/>
-        <provided namespace='osgi.bundle' name='org.mule.tooling.ui.contribution.ftp-client.3.5.0' version='0.0.2.201805022042'/>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='org.mule.tooling.ui.contribution.ftp-client.3.5.0' version='1.0.0.201805062118'/>
+        <provided namespace='osgi.bundle' name='org.mule.tooling.ui.contribution.ftp-client.3.5.0' version='1.0.0.201805062118'/>
         <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
       </provides>
       <requires size='3'>
@@ -47,7 +60,7 @@
         <required namespace='osgi.bundle' name='org.mule.tooling.core' range='1.0.0'/>
       </requires>
       <artifacts size='1'>
-        <artifact classifier='osgi.bundle' id='org.mule.tooling.ui.contribution.ftp-client.3.5.0' version='0.0.2.201805022042'/>
+        <artifact classifier='osgi.bundle' id='org.mule.tooling.ui.contribution.ftp-client.3.5.0' version='1.0.0.201805062118'/>
       </artifacts>
       <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
       <touchpointData size='1'>
@@ -56,26 +69,26 @@
             true
           </instruction>
           <instruction key='manifest'>
-            Bundle-SymbolicName: org.mule.tooling.ui.contribution.ftp-client.3.5.0;singleton:=true&#xA;Bundle-Version: 0.0.2.201805022042
+            Bundle-SymbolicName: org.mule.tooling.ui.contribution.ftp-client.3.5.0;singleton:=true&#xA;Bundle-Version: 1.0.0.201805062118
           </instruction>
         </instructions>
       </touchpointData>
     </unit>
-    <unit id='org.mule.tooling.ui.extension.ftp-client-connector.3.5.0.feature.jar' version='0.0.2.201805022042'>
+    <unit id='org.mule.tooling.ui.extension.ftp-client-connector.3.5.0.feature.jar' version='1.0.0.201805062118'>
       <properties size='2'>
         <property name='org.eclipse.equinox.p2.name' value='FTP/SFTP Connector (Mule 3.5.0+)'/>
         <property name='org.eclipse.equinox.p2.provider' value='Mulesoft, Inc.'/>
       </properties>
       <provides size='3'>
-        <provided namespace='org.eclipse.equinox.p2.iu' name='org.mule.tooling.ui.extension.ftp-client-connector.3.5.0.feature.jar' version='0.0.2.201805022042'/>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='org.mule.tooling.ui.extension.ftp-client-connector.3.5.0.feature.jar' version='1.0.0.201805062118'/>
         <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='feature' version='1.0.0'/>
-        <provided namespace='org.eclipse.update.feature' name='org.mule.tooling.ui.extension.ftp-client-connector.3.5.0' version='0.0.2.201805022042'/>
+        <provided namespace='org.eclipse.update.feature' name='org.mule.tooling.ui.extension.ftp-client-connector.3.5.0' version='1.0.0.201805062118'/>
       </provides>
       <filter>
         (org.eclipse.update.install.features=true)
       </filter>
       <artifacts size='1'>
-        <artifact classifier='org.eclipse.update.feature' id='org.mule.tooling.ui.extension.ftp-client-connector.3.5.0' version='0.0.2.201805022042'/>
+        <artifact classifier='org.eclipse.update.feature' id='org.mule.tooling.ui.extension.ftp-client-connector.3.5.0' version='1.0.0.201805062118'/>
       </artifacts>
       <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
       <touchpointData size='1'>
@@ -90,19 +103,6 @@
           Apache License&#xD;&#xA;                           Version 2.0, January 2004&#xD;&#xA;                        http://www.apache.org/licenses/&#xD;&#xA;&#xD;&#xA;   TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION&#xD;&#xA;&#xD;&#xA;   1. Definitions.&#xD;&#xA;&#xD;&#xA;      &quot;License&quot; shall mean the terms and conditions for use, reproduction,&#xD;&#xA;      and distribution as defined by Sections 1 through 9 of this document.&#xD;&#xA;&#xD;&#xA;      &quot;Licensor&quot; shall mean the copyright owner or entity authorized by&#xD;&#xA;      the copyright owner that is granting the License.&#xD;&#xA;&#xD;&#xA;      &quot;Legal Entity&quot; shall mean the union of the acting entity and all&#xD;&#xA;      other entities that control, are controlled by, or are under common&#xD;&#xA;      control with that entity. For the purposes of this definition,&#xD;&#xA;      &quot;control&quot; means (i) the power, direct or indirect, to cause the&#xD;&#xA;      direction or management of such entity, whether by contract or&#xD;&#xA;      otherwise, or (ii) ownership of fifty percent (50%) or more of the&#xD;&#xA;      outstanding shares, or (iii) beneficial ownership of such entity.&#xD;&#xA;&#xD;&#xA;      &quot;You&quot; (or &quot;Your&quot;) shall mean an individual or Legal Entity&#xD;&#xA;      exercising permissions granted by this License.&#xD;&#xA;&#xD;&#xA;      &quot;Source&quot; form shall mean the preferred form for making modifications,&#xD;&#xA;      including but not limited to software source code, documentation&#xD;&#xA;      source, and configuration files.&#xD;&#xA;&#xD;&#xA;      &quot;Object&quot; form shall mean any form resulting from mechanical&#xD;&#xA;      transformation or translation of a Source form, including but&#xD;&#xA;      not limited to compiled object code, generated documentation,&#xD;&#xA;      and conversions to other media types.&#xD;&#xA;&#xD;&#xA;      &quot;Work&quot; shall mean the work of authorship, whether in Source or&#xD;&#xA;      Object form, made available under the License, as indicated by a&#xD;&#xA;      copyright notice that is included in or attached to the work&#xD;&#xA;      (an example is provided in the Appendix below).&#xD;&#xA;&#xD;&#xA;      &quot;Derivative Works&quot; shall mean any work, whether in Source or Object&#xD;&#xA;      form, that is based on (or derived from) the Work and for which the&#xD;&#xA;      editorial revisions, annotations, elaborations, or other modifications&#xD;&#xA;      represent, as a whole, an original work of authorship. For the purposes&#xD;&#xA;      of this License, Derivative Works shall not include works that remain&#xD;&#xA;      separable from, or merely link (or bind by name) to the interfaces of,&#xD;&#xA;      the Work and Derivative Works thereof.&#xD;&#xA;&#xD;&#xA;      &quot;Contribution&quot; shall mean any work of authorship, including&#xD;&#xA;      the original version of the Work and any modifications or additions&#xD;&#xA;      to that Work or Derivative Works thereof, that is intentionally&#xD;&#xA;      submitted to Licensor for inclusion in the Work by the copyright owner&#xD;&#xA;      or by an individual or Legal Entity authorized to submit on behalf of&#xD;&#xA;      the copyright owner. For the purposes of this definition, &quot;submitted&quot;&#xD;&#xA;      means any form of electronic, verbal, or written communication sent&#xD;&#xA;      to the Licensor or its representatives, including but not limited to&#xD;&#xA;      communication on electronic mailing lists, source code control systems,&#xD;&#xA;      and issue tracking systems that are managed by, or on behalf of, the&#xD;&#xA;      Licensor for the purpose of discussing and improving the Work, but&#xD;&#xA;      excluding communication that is conspicuously marked or otherwise&#xD;&#xA;      designated in writing by the copyright owner as &quot;Not a Contribution.&quot;&#xD;&#xA;&#xD;&#xA;      &quot;Contributor&quot; shall mean Licensor and any individual or Legal Entity&#xD;&#xA;      on behalf of whom a Contribution has been received by Licensor and&#xD;&#xA;      subsequently incorporated within the Work.&#xD;&#xA;&#xD;&#xA;   2. Grant of Copyright License. Subject to the terms and conditions of&#xD;&#xA;      this License, each Contributor hereby grants to You a perpetual,&#xD;&#xA;      worldwide, non-exclusive, no-charge, royalty-free, irrevocable&#xD;&#xA;      copyright license to reproduce, prepare Derivative Works of,&#xD;&#xA;      publicly display, publicly perform, sublicense, and distribute the&#xD;&#xA;      Work and such Derivative Works in Source or Object form.&#xD;&#xA;&#xD;&#xA;   3. Grant of Patent License. Subject to the terms and conditions of&#xD;&#xA;      this License, each Contributor hereby grants to You a perpetual,&#xD;&#xA;      worldwide, non-exclusive, no-charge, royalty-free, irrevocable&#xD;&#xA;      (except as stated in this section) patent license to make, have made,&#xD;&#xA;      use, offer to sell, sell, import, and otherwise transfer the Work,&#xD;&#xA;      where such license applies only to those patent claims licensable&#xD;&#xA;      by such Contributor that are necessarily infringed by their&#xD;&#xA;      Contribution(s) alone or by combination of their Contribution(s)&#xD;&#xA;      with the Work to which such Contribution(s) was submitted. If You&#xD;&#xA;      institute patent litigation against any entity (including a&#xD;&#xA;      cross-claim or counterclaim in a lawsuit) alleging that the Work&#xD;&#xA;      or a Contribution incorporated within the Work constitutes direct&#xD;&#xA;      or contributory patent infringement, then any patent licenses&#xD;&#xA;      granted to You under this License for that Work shall terminate&#xD;&#xA;      as of the date such litigation is filed.&#xD;&#xA;&#xD;&#xA;   4. Redistribution. You may reproduce and distribute copies of the&#xD;&#xA;      Work or Derivative Works thereof in any medium, with or without&#xD;&#xA;      modifications, and in Source or Object form, provided that You&#xD;&#xA;      meet the following conditions:&#xD;&#xA;&#xD;&#xA;      (a) You must give any other recipients of the Work or&#xD;&#xA;          Derivative Works a copy of this License; and&#xD;&#xA;&#xD;&#xA;      (b) You must cause any modified files to carry prominent notices&#xD;&#xA;          stating that You changed the files; and&#xD;&#xA;&#xD;&#xA;      (c) You must retain, in the Source form of any Derivative Works&#xD;&#xA;          that You distribute, all copyright, patent, trademark, and&#xD;&#xA;          attribution notices from the Source form of the Work,&#xD;&#xA;          excluding those notices that do not pertain to any part of&#xD;&#xA;          the Derivative Works; and&#xD;&#xA;&#xD;&#xA;      (d) If the Work includes a &quot;NOTICE&quot; text file as part of its&#xD;&#xA;          distribution, then any Derivative Works that You distribute must&#xD;&#xA;          include a readable copy of the attribution notices contained&#xD;&#xA;          within such NOTICE file, excluding those notices that do not&#xD;&#xA;          pertain to any part of the Derivative Works, in at least one&#xD;&#xA;          of the following places: within a NOTICE text file distributed&#xD;&#xA;          as part of the Derivative Works; within the Source form or&#xD;&#xA;          documentation, if provided along with the Derivative Works; or,&#xD;&#xA;          within a display generated by the Derivative Works, if and&#xD;&#xA;          wherever such third-party notices normally appear. The contents&#xD;&#xA;          of the NOTICE file are for informational purposes only and&#xD;&#xA;          do not modify the License. You may add Your own attribution&#xD;&#xA;          notices within Derivative Works that You distribute, alongside&#xD;&#xA;          or as an addendum to the NOTICE text from the Work, provided&#xD;&#xA;          that such additional attribution notices cannot be construed&#xD;&#xA;          as modifying the License.&#xD;&#xA;&#xD;&#xA;      You may add Your own copyright statement to Your modifications and&#xD;&#xA;      may provide additional or different license terms and conditions&#xD;&#xA;      for use, reproduction, or distribution of Your modifications, or&#xD;&#xA;      for any such Derivative Works as a whole, provided Your use,&#xD;&#xA;      reproduction, and distribution of the Work otherwise complies with&#xD;&#xA;      the conditions stated in this License.&#xD;&#xA;&#xD;&#xA;   5. Submission of Contributions. Unless You explicitly state otherwise,&#xD;&#xA;      any Contribution intentionally submitted for inclusion in the Work&#xD;&#xA;      by You to the Licensor shall be under the terms and conditions of&#xD;&#xA;      this License, without any additional terms or conditions.&#xD;&#xA;      Notwithstanding the above, nothing herein shall supersede or modify&#xD;&#xA;      the terms of any separate license agreement you may have executed&#xD;&#xA;      with Licensor regarding such Contributions.&#xD;&#xA;&#xD;&#xA;   6. Trademarks. This License does not grant permission to use the trade&#xD;&#xA;      names, trademarks, service marks, or product names of the Licensor,&#xD;&#xA;      except as required for reasonable and customary use in describing the&#xD;&#xA;      origin of the Work and reproducing the content of the NOTICE file.&#xD;&#xA;&#xD;&#xA;   7. Disclaimer of Warranty. Unless required by applicable law or&#xD;&#xA;      agreed to in writing, Licensor provides the Work (and each&#xD;&#xA;      Contributor provides its Contributions) on an &quot;AS IS&quot; BASIS,&#xD;&#xA;      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or&#xD;&#xA;      implied, including, without limitation, any warranties or conditions&#xD;&#xA;      of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A&#xD;&#xA;      PARTICULAR PURPOSE. You are solely responsible for determining the&#xD;&#xA;      appropriateness of using or redistributing the Work and assume any&#xD;&#xA;      risks associated with Your exercise of permissions under this License.&#xD;&#xA;&#xD;&#xA;   8. Limitation of Liability. In no event and under no legal theory,&#xD;&#xA;      whether in tort (including negligence), contract, or otherwise,&#xD;&#xA;      unless required by applicable law (such as deliberate and grossly&#xD;&#xA;      negligent acts) or agreed to in writing, shall any Contributor be&#xD;&#xA;      liable to You for damages, including any direct, indirect, special,&#xD;&#xA;      incidental, or consequential damages of any character arising as a&#xD;&#xA;      result of this License or out of the use or inability to use the&#xD;&#xA;      Work (including but not limited to damages for loss of goodwill,&#xD;&#xA;      work stoppage, computer failure or malfunction, or any and all&#xD;&#xA;      other commercial damages or losses), even if such Contributor&#xD;&#xA;      has been advised of the possibility of such damages.&#xD;&#xA;&#xD;&#xA;   9. Accepting Warranty or Additional Liability. While redistributing&#xD;&#xA;      the Work or Derivative Works thereof, You may choose to offer,&#xD;&#xA;      and charge a fee for, acceptance of support, warranty, indemnity,&#xD;&#xA;      or other liability obligations and/or rights consistent with this&#xD;&#xA;      License. However, in accepting such obligations, You may act only&#xD;&#xA;      on Your own behalf and on Your sole responsibility, not on behalf&#xD;&#xA;      of any other Contributor, and only if You agree to indemnify,&#xD;&#xA;      defend, and hold each Contributor harmless for any liability&#xD;&#xA;      incurred by, or claims asserted against, such Contributor by reason&#xD;&#xA;      of your accepting any such warranty or additional liability.&#xD;&#xA;&#xD;&#xA;   END OF TERMS AND CONDITIONS&#xD;&#xA;&#xD;&#xA;   APPENDIX: How to apply the Apache License to your work.&#xD;&#xA;&#xD;&#xA;      To apply the Apache License to your work, attach the following&#xD;&#xA;      boilerplate notice, with the fields enclosed by brackets &quot;[]&quot;&#xD;&#xA;      replaced with your own identifying information. (Don&apos;t include&#xD;&#xA;      the brackets!)  The text should be enclosed in the appropriate&#xD;&#xA;      comment syntax for the file format. We also recommend that a&#xD;&#xA;      file or class name and description of purpose be included on the&#xD;&#xA;      same &quot;printed page&quot; as the copyright notice for easier&#xD;&#xA;      identification within third-party archives.&#xD;&#xA;&#xD;&#xA;   Copyright [yyyy] [name of copyright owner]&#xD;&#xA;&#xD;&#xA;   Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);&#xD;&#xA;   you may not use this file except in compliance with the License.&#xD;&#xA;   You may obtain a copy of the License at&#xD;&#xA;&#xD;&#xA;       http://www.apache.org/licenses/LICENSE-2.0&#xD;&#xA;&#xD;&#xA;   Unless required by applicable law or agreed to in writing, software&#xD;&#xA;   distributed under the License is distributed on an &quot;AS IS&quot; BASIS,&#xD;&#xA;   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.&#xD;&#xA;   See the License for the specific language governing permissions and&#xD;&#xA;   limitations under the License.
         </license>
       </licenses>
-    </unit>
-    <unit id='file:/C:/java/mule/workspace/ftp-client-connector/target/classes/category.xml.de.codecentric.mule.modules' version='1.0.0.0-3cKMydJ7735I3C3773A7'>
-      <properties size='2'>
-        <property name='org.eclipse.equinox.p2.name' value='Community'/>
-        <property name='org.eclipse.equinox.p2.type.category' value='true'/>
-      </properties>
-      <provides size='1'>
-        <provided namespace='org.eclipse.equinox.p2.iu' name='file:/C:/java/mule/workspace/ftp-client-connector/target/classes/category.xml.de.codecentric.mule.modules' version='1.0.0.0-3cKMydJ7735I3C3773A7'/>
-      </provides>
-      <requires size='1'>
-        <required namespace='org.eclipse.equinox.p2.iu' name='org.mule.tooling.ui.extension.ftp-client-connector.3.5.0.feature.group' range='[0.0.2.201805022042,0.0.2.201805022042]'/>
-      </requires>
-      <touchpoint id='null' version='0.0.0'/>
     </unit>
   </units>
 </repository>
