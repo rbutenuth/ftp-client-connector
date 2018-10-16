@@ -22,7 +22,6 @@ public class SftpGetTest extends AbstractSftpClientTest {
             assertNotNull("input stream", is);
             assertEquals(HELLO, IOUtils.toString(is, StandardCharsets.UTF_8));
         }
-        assertEquals(0, connector.getConfig().getActiveConnections());
     }
 
     @Test
@@ -36,7 +35,6 @@ public class SftpGetTest extends AbstractSftpClientTest {
             assertNotNull("input stream", is);
             assertEquals(HELLO, IOUtils.toString(is, StandardCharsets.UTF_8));
         }
-        assertEquals(0, connector.getConfig().getActiveConnections());
     }
 
     @Test
@@ -52,7 +50,6 @@ public class SftpGetTest extends AbstractSftpClientTest {
             assertEquals(HELLO, IOUtils.toString(is, StandardCharsets.UTF_8));
         }
         assertTrue("file still exists", testFile.isFile());
-        assertEquals(0, connector.getConfig().getActiveConnections());
     }
 
     @Test
@@ -66,7 +63,6 @@ public class SftpGetTest extends AbstractSftpClientTest {
             byte[] read = IOUtils.toByteArray(is);
             assertArrayEquals(written, read);
         }
-        assertEquals(0, connector.getConfig().getActiveConnections());
     }
 
     @Test
@@ -77,7 +73,6 @@ public class SftpGetTest extends AbstractSftpClientTest {
         fileManager.createBinaryFile(new File(pwdUserDir, "test.bin"), written);
         byte[] read = (byte[]) connector.getFile("", "test.bin", false);
         assertArrayEquals(written, read);
-        assertEquals(0, connector.getConfig().getActiveConnections());
     }
 
     @Test
@@ -103,6 +98,5 @@ public class SftpGetTest extends AbstractSftpClientTest {
         fileManager.createTextFile(new File(new File(baseDir, directory), "test.txt"), content);
         byte[] result = (byte[]) connector.getFile(directory, "test.txt", false);
         assertArrayEquals(content.getBytes(StandardCharsets.UTF_8), result);
-        assertEquals(0, connector.getConfig().getActiveConnections());
     }
 }

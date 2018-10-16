@@ -27,19 +27,14 @@ public class FtpConnectionTest extends AbstractFtpClientTest {
         assertEquals(ADMIN_USER, config.getUser());
         assertEquals(ADMIN_PASSWORD, config.getPassword());
         assertEquals(ADMIN_USER, config.connectionId());
-        config.disconnect();
-        assertEquals(0, config.getActiveConnections());
     }
 
     @Test
-    public void configTestConnectBadHost() throws Exception {
+    public void configTestConnectBadHost() {
         try (FtpConnectorFactory f = new FtpConnectorFactory("foo.baz", ftpServer.getPort(), ADMIN_USER,
                 ADMIN_PASSWORD)) {
-            FtpClientConnector connector = f.createConnector(TransferMode.Binary, true);
-            FtpConfig config = connector.getConfig();
-            config.setPassword(ADMIN_PASSWORD);
             try {
-                config.testConnect(ADMIN_USER);
+                f.createConnector(TransferMode.Binary, true);
                 fail("ConnectionException missing");
             } catch (ConnectionException e) {
                 assertEquals(ConnectionExceptionCode.UNKNOWN_HOST, e.getCode());
@@ -48,12 +43,11 @@ public class FtpConnectionTest extends AbstractFtpClientTest {
     }
 
     @Test
-    public void configConnectBadHost() throws Exception {
+    public void configConnectBadHost() {
         try (FtpConnectorFactory f = new FtpConnectorFactory("foo.baz", ftpServer.getPort(), ADMIN_USER,
                 ADMIN_PASSWORD)) {
-            FtpClientConnector connector = f.createConnector(TransferMode.Binary, true);
             try {
-                connector.getFile("", "test.txt", false);
+                f.createConnector(TransferMode.Binary, true);
                 fail("ConnectionException missing");
             } catch (ConnectionException e) {
                 assertEquals(ConnectionExceptionCode.UNKNOWN_HOST, e.getCode());
@@ -75,11 +69,10 @@ public class FtpConnectionTest extends AbstractFtpClientTest {
     }
 
     @Test
-    public void configConnectBadCredentials() throws Exception {
+    public void configConnectBadCredentials() {
         try (FtpConnectorFactory f = new FtpConnectorFactory("localhost", ftpServer.getPort(), "foo", "baz")) {
-            FtpClientConnector connector = f.createConnector(TransferMode.Binary, true);
             try {
-                connector.getFile("", "test.txt", false);
+                f.createConnector(TransferMode.Binary, true);
                 fail("ConnectionException missing");
             } catch (ConnectionException e) {
                 assertEquals(ConnectionExceptionCode.INCORRECT_CREDENTIALS, e.getCode());

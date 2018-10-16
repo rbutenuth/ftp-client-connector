@@ -1,7 +1,6 @@
 package org.mule.modules.ftpclient.config;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.pool.impl.GenericObjectPool;
 import org.mule.api.ConnectionException;
 import org.mule.api.ConnectionExceptionCode;
 import org.mule.api.annotations.Configurable;
@@ -13,16 +12,16 @@ import org.mule.api.annotations.display.Password;
 import org.mule.api.annotations.display.Placement;
 import org.mule.api.annotations.param.ConnectionKey;
 import org.mule.api.annotations.param.Optional;
-import org.mule.modules.ftpclient.sftp.SftpClientFactory;
 import org.mule.modules.ftpclient.sftp.SftpClientWrapper;
 import org.mule.modules.ftpclient.sftp.UnrestrictedCryptographyEnabler;
 
 import com.jcraft.jsch.Channel;
+import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 
 @ConnectionManagement(configElementName = "sftp-config", friendlyName = "Sftp Configuration")
-public class SftpConfig extends AbstractConfig<SftpClientWrapper> {
+public class SftpConfig extends AbstractConfig {
 
     @Configurable
     @Placement(order = 3, group = "Server")
@@ -65,16 +64,25 @@ public class SftpConfig extends AbstractConfig<SftpClientWrapper> {
     public void connect(
             @SuppressWarnings("hiding") @Placement(order = 1, group = "Connection") @ConnectionKey String user)
             throws ConnectionException {
+        LOGGER.debug("connect, host={}, port={}, user={}", host, port, user);
         this.user = user;
         if (StringUtils.isNotEmpty(identityFile) && StringUtils.isNotEmpty(identityResource)) {
             throw new ConnectionException(ConnectionExceptionCode.UNKNOWN, "",
                     "Don't specifiy Identity File and Identity Classpath Resource");
         }
-        SftpClientFactory factory = new SftpClientFactory(jsch, host, port, knownHostsFile, user, password,
-                identityFile, identityResource, passphrase);
-        clientPool = new GenericObjectPool<>(factory);
-        clientPool.setTestOnBorrow(true);
-        factory.setPool(clientPool);
+        ChannelSftp channel;
+        if (StringUtils.isNotBlank(identityFile) || StringUtils.isNotBlank(identityResource)) {
+            channel = SftpClientWrapper.createChannel(jsch, host, port, knownHostsFile, user, identityFile,
+                    identityResource, passphrase);
+        } else {
+            channel = SftpClientWrapper.createChannel(jsch, host, port, knownHostsFile, user, password);
+        }
+        try {
+            channel.connect();
+        } catch (JSchException e) {
+            throw new ConnectionException(ConnectionExceptionCode.UNKNOWN, e.getMessage(), e.getMessage(), e);
+        }
+        clientWrapper = new SftpClientWrapper(channel);
     }
 
     @TestConnectivity
@@ -87,27 +95,18 @@ public class SftpConfig extends AbstractConfig<SftpClientWrapper> {
                     "Don't specifiy Identity File and Identity Classpath Resource");
         }
         try {
+            Channel channel;
             if (StringUtils.isNotBlank(identityFile) || StringUtils.isNotBlank(identityResource)) {
-                testConnectKey();
+                channel = SftpClientWrapper.createChannel(jsch, host, port, knownHostsFile, user, identityFile,
+                        identityResource, passphrase);
             } else {
-                testConnectPassword();
+                channel = SftpClientWrapper.createChannel(jsch, host, port, knownHostsFile, user, password);
             }
+            channel.connect();
+            channel.disconnect();
         } catch (JSchException e) {
             SftpClientWrapper.translateException(e, host, port, user);
         }
-    }
-
-    private void testConnectPassword() throws ConnectionException, JSchException {
-        Channel channel = SftpClientWrapper.createChannel(jsch, host, port, knownHostsFile, user, password);
-        channel.connect();
-        channel.disconnect();
-    }
-
-    private void testConnectKey() throws ConnectionException, JSchException {
-        Channel channel = SftpClientWrapper.createChannel(jsch, host, port, knownHostsFile, user, identityFile,
-                identityResource, passphrase);
-        channel.connect();
-        channel.disconnect();
     }
 
     public String getKnownHostsFile() {

@@ -198,7 +198,7 @@ public class FtpPollTest extends AbstractFtpClientTest {
     private void checkFile(MuleMessage message, byte[] content, String originalFilename, String filename, long length)
             throws IOException {
         assertEquals(4, message.getPropertyNames(PropertyScope.INBOUND).size());
-        assertEquals(length, message.getInboundProperty("fileSize"));
+        assertEquals(length, (long)message.getInboundProperty("fileSize"));
         assertEquals(originalFilename, message.getInboundProperty("originalFilename"));
         assertEquals(filename, message.getInboundProperty("filename"));
         assertNotNull(message.getInboundProperty("timestamp"));

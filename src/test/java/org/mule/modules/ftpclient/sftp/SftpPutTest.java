@@ -22,7 +22,6 @@ public class SftpPutTest extends AbstractSftpClientTest {
         connector.putFile("", "test.txt", HELLO.getBytes(StandardCharsets.UTF_8), null);
         String content = fileManager.readTextFile(new File(pwdUserDir, "test.txt"));
         assertEquals(HELLO, content);
-        assertEquals(0, connector.getConfig().getActiveConnections());
     }
 
     @Test
@@ -33,7 +32,6 @@ public class SftpPutTest extends AbstractSftpClientTest {
         connector.putFile("", "test.txt", HELLO.getBytes(StandardCharsets.UTF_8), null);
         String content = fileManager.readTextFile(new File(keyUserDir, "test.txt"));
         assertEquals(HELLO, content);
-        assertEquals(0, connector.getConfig().getActiveConnections());
     }
 
     @Test
@@ -43,7 +41,6 @@ public class SftpPutTest extends AbstractSftpClientTest {
         connector.putFile("", "test.txt", new ByteArrayInputStream(HELLO.getBytes(StandardCharsets.UTF_8)), null);
         String content = fileManager.readTextFile(new File(pwdUserDir, "test.txt"));
         assertEquals(HELLO, content);
-        assertEquals(0, connector.getConfig().getActiveConnections());
     }
 
     @Test
@@ -59,7 +56,6 @@ public class SftpPutTest extends AbstractSftpClientTest {
             }
         };
         connector.putFile("", "test.txt", outputHandler, null);
-        assertEquals(0, connector.getConfig().getActiveConnections());
     }
 
     @Test
@@ -69,7 +65,6 @@ public class SftpPutTest extends AbstractSftpClientTest {
         connector.putFile("", "test.txt", HELLO.getBytes(StandardCharsets.UTF_8), null);
         String content = fileManager.readTextFile(new File(pwdUserDir, "test.txt"));
         assertEquals(HELLO, content);
-        assertEquals(0, connector.getConfig().getActiveConnections());
     }
 
     @Test
@@ -79,7 +74,6 @@ public class SftpPutTest extends AbstractSftpClientTest {
         connector.putFile("", "test.bin", written, null);
         byte[] read = fileManager.readBinaryFile(new File(pwdUserDir, "test.bin"));
         assertArrayEquals(written, read);
-        assertEquals(0, connector.getConfig().getActiveConnections());
     }
 
     @Test
@@ -89,7 +83,6 @@ public class SftpPutTest extends AbstractSftpClientTest {
         connector.putFile("", "test.bin", new ByteArrayInputStream(written), null);
         byte[] read = fileManager.readBinaryFile(new File(pwdUserDir, "test.bin"));
         assertArrayEquals(written, read);
-        assertEquals(0, connector.getConfig().getActiveConnections());
     }
 
     @Test
@@ -117,7 +110,6 @@ public class SftpPutTest extends AbstractSftpClientTest {
         String result = fileManager.readTextFile(new File(new File(baseDir, directory), "test.txt"));
 
         assertEquals(content, result);
-        assertEquals(0, connector.getConfig().getActiveConnections());
     }
 
 }

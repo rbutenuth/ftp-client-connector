@@ -12,7 +12,6 @@ import java.util.function.Consumer;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPReply;
-import org.apache.commons.pool.impl.GenericObjectPool;
 import org.apache.log4j.Logger;
 import org.mule.model.streaming.CallbackOutputStream;
 import org.mule.modules.ftpclient.AutoCloseOnEOFInputStream;
@@ -24,11 +23,9 @@ import org.mule.modules.ftpclient.RemoteFile;
 public class FtpClientWrapper extends ClientWrapper {
     private static Logger logger = Logger.getLogger(FtpClientWrapper.class);
 
-    private GenericObjectPool<FtpClientWrapper> pool;
     private FTPClient client;
 
-    public FtpClientWrapper(GenericObjectPool<FtpClientWrapper> pool, FTPClient client) {
-        this.pool = pool;
+    public FtpClientWrapper(FTPClient client) {
         this.client = client;
     }
 
@@ -71,9 +68,7 @@ public class FtpClientWrapper extends ClientWrapper {
                     }
                 }
             });
-        } catch (RuntimeException e) {
-            throw invalidate(e);
-        } catch (IOException e) {
+        } catch (IOException | RuntimeException e) {
             throw invalidate(e);
         }
     }
@@ -102,17 +97,10 @@ public class FtpClientWrapper extends ClientWrapper {
                         invalidate();
                     } else {
                         onClose.accept(FtpClientWrapper.this);
-                        try {
-                            pool.returnObject(FtpClientWrapper.this);
-                        } catch (Exception e) {
-                            logger.error("ignore exception on cleanup", e);
-                        }
                     }
                 }
             });
-        } catch (RuntimeException e) {
-            throw invalidate(e);
-        } catch (IOException e) {
+        } catch (IOException | RuntimeException e) {
             throw invalidate(e);
         }
     }
@@ -132,9 +120,7 @@ public class FtpClientWrapper extends ClientWrapper {
             if (!client.deleteFile(filename)) {
                 throw new IOException("Could not delete " + directory + "/" + filename);
             }
-        } catch (RuntimeException e) {
-            throw invalidate(e);
-        } catch (IOException e) {
+        } catch (IOException | RuntimeException e) {
             throw invalidate(e);
         }
     }
@@ -174,9 +160,7 @@ public class FtpClientWrapper extends ClientWrapper {
                     fileList.add(new RemoteFile(type, file.getName(), file.getSize(), timestamp));
                 }
             }
-        } catch (RuntimeException e) {
-            throw invalidate(e);
-        } catch (IOException e) {
+        } catch (IOException | RuntimeException e) {
             throw invalidate(e);
         }
         return fileList;
@@ -240,10 +224,8 @@ public class FtpClientWrapper extends ClientWrapper {
         try {
             if (!client.completePendingCommand()) {
                 invalidate();
-            } else {
-                pool.returnObject(this);
             }
-        } catch (Exception e) {
+        } catch (IOException e) {
             logger.error("ignore exception on cleanup", e);
         }
     }
@@ -251,7 +233,6 @@ public class FtpClientWrapper extends ClientWrapper {
     private void invalidate() {
         try {
             destroy();
-            pool.invalidateObject(this);
         } catch (Exception e) {
             logger.error("ignore exception on cleanup", e);
         }

@@ -25,7 +25,6 @@ public class FtpPutTest extends AbstractFtpClientTest {
         connector.putFile("", "test.txt", HELLO.getBytes(StandardCharsets.UTF_8), null);
         String content = fileManager.readTextFile(new File(fileManager.getDirectory(), "test.txt"));
         assertEquals(HELLO, content);
-        assertEquals(0, connector.getConfig().getActiveConnections());
     }
 
     @Test
@@ -35,7 +34,6 @@ public class FtpPutTest extends AbstractFtpClientTest {
         connector.putFile("", "test.txt", new ByteArrayInputStream(HELLO.getBytes(StandardCharsets.UTF_8)), null);
         String content = fileManager.readTextFile(new File(fileManager.getDirectory(), "test.txt"));
         assertEquals(HELLO, content);
-        assertEquals(0, connector.getConfig().getActiveConnections());
     }
 
     @Test
@@ -45,7 +43,6 @@ public class FtpPutTest extends AbstractFtpClientTest {
         connector.putFile("", "test.txt", new StringBuilder(HELLO), createEvent());
         String content = fileManager.readTextFile(new File(fileManager.getDirectory(), "test.txt"));
         assertEquals(HELLO, content);
-        assertEquals(0, connector.getConfig().getActiveConnections());
     }
 
     private MuleEvent createEvent() {
@@ -67,7 +64,6 @@ public class FtpPutTest extends AbstractFtpClientTest {
             }
         };
         connector.putFile("", "test.txt", outputHandler, null);
-        assertEquals(0, connector.getConfig().getActiveConnections());
     }
 
     @Test
@@ -78,7 +74,6 @@ public class FtpPutTest extends AbstractFtpClientTest {
         connector.putFile("", "test.txt", HELLO.getBytes(StandardCharsets.UTF_8), null);
         String content = fileManager.readTextFile(new File(fileManager.getDirectory(), "test.txt"));
         assertFalse(HELLO.equals(content));
-        assertEquals(0, connector.getConfig().getActiveConnections());
     }
 
     @Test
@@ -89,7 +84,6 @@ public class FtpPutTest extends AbstractFtpClientTest {
         connector.putFile("", "test.txt", HELLO.getBytes(StandardCharsets.UTF_8), null);
         String content = fileManager.readTextFile(new File(fileManager.getDirectory(), "test.txt"));
         assertEquals(HELLO, content);
-        assertEquals(0, connector.getConfig().getActiveConnections());
     }
 
     @Test
@@ -99,7 +93,6 @@ public class FtpPutTest extends AbstractFtpClientTest {
         connector.putFile("", "test.bin", written, null);
         byte[] read = fileManager.readBinaryFile(new File(fileManager.getDirectory(), "test.bin"));
         assertArrayEquals(written, read);
-        assertEquals(0, connector.getConfig().getActiveConnections());
     }
 
     @Test
@@ -109,7 +102,6 @@ public class FtpPutTest extends AbstractFtpClientTest {
         connector.putFile("", "test.bin", new ByteArrayInputStream(written), null);
         byte[] read = fileManager.readBinaryFile(new File(fileManager.getDirectory(), "test.bin"));
         assertArrayEquals(written, read);
-        assertEquals(0, connector.getConfig().getActiveConnections());
     }
 
     @Test
@@ -119,7 +111,6 @@ public class FtpPutTest extends AbstractFtpClientTest {
         connector.putFile("", "test.bin", written, null);
         byte[] read = fileManager.readBinaryFile(new File(fileManager.getDirectory(), "test.bin"));
         assertEquals(0, read.length);
-        assertEquals(0, connector.getConfig().getActiveConnections());
     }
 
     @Test
@@ -129,7 +120,6 @@ public class FtpPutTest extends AbstractFtpClientTest {
         connector.putFile("", "test.bin", written, null);
         byte[] read = fileManager.readBinaryFile(new File(fileManager.getDirectory(), "test.bin"));
         assertEquals(0, read.length);
-        assertEquals(0, connector.getConfig().getActiveConnections());
     }
 
     @Test
@@ -158,7 +148,6 @@ public class FtpPutTest extends AbstractFtpClientTest {
         String result = fileManager.readTextFile(new File(new File(baseDir, dirWithoutSlash), "test.txt"));
 
         assertEquals(content, result);
-        assertEquals(0, connector.getConfig().getActiveConnections());
     }
 
 }

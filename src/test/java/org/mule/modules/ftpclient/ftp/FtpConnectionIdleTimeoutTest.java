@@ -27,13 +27,11 @@ public class FtpConnectionIdleTimeoutTest extends AbstractFtpClientTest {
             assertNotNull("input stream", is);
             assertEquals(HELLO, IOUtils.toString(is, StandardCharsets.UTF_8));
         }
-        Thread.sleep(10_000);
-        try (InputStream is = (InputStream) connector.getFile("", "test.txt", true)) {
-            assertNotNull("input stream", is);
-            assertEquals(HELLO, IOUtils.toString(is, StandardCharsets.UTF_8));
-        }
+        assertTrue(connector.getConfig().isConnected());
 
-        assertEquals(0, connector.getConfig().getActiveConnections());
+        Thread.sleep(10_000);
+
+        assertFalse(connector.getConfig().isConnected());
     }
 
 }

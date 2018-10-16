@@ -1,11 +1,11 @@
 package org.mule.modules.ftpclient.config;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
 import java.util.function.Consumer;
 
-import org.apache.commons.pool.impl.GenericObjectPool;
 import org.mule.api.annotations.Configurable;
 import org.mule.api.annotations.ConnectionIdentifier;
 import org.mule.api.annotations.Disconnect;
@@ -17,9 +17,10 @@ import org.mule.modules.ftpclient.RemoteFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public abstract class AbstractConfig<W extends ClientWrapper> {
+public abstract class AbstractConfig {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractConfig.class);
+    // Not static, should reflect the non abstract class inheriting from this.
+    protected final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
     @Configurable
     @Placement(order = 1, group = "Server")
@@ -32,7 +33,7 @@ public abstract class AbstractConfig<W extends ClientWrapper> {
 
     protected String user;
 
-    protected GenericObjectPool<W> clientPool;
+    protected ClientWrapper clientWrapper;
 
     private static final Consumer<ClientWrapper> DO_NOTHING_CONSUMER = new Consumer<ClientWrapper>() {
         @Override
@@ -48,25 +49,23 @@ public abstract class AbstractConfig<W extends ClientWrapper> {
 
     @Disconnect
     public void disconnect() {
-        if (clientPool != null) {
+        LOGGER.debug("disconnect, host={}, port={}, user={}", host, port, user);
+        if (clientWrapper != null) {
             try {
-                clientPool.clear();
-                clientPool.close();
+                clientWrapper.destroy();
             } catch (Exception e) {
                 LOGGER.debug("ignore exception on cleanup", e);
             }
-            clientPool = null;
         }
+        clientWrapper = null;
         user = null;
     }
 
     @ValidateConnection
     public boolean isConnected() {
-        return clientPool != null;
-    }
-
-    public int getActiveConnections() {
-        return clientPool == null ? 0 : clientPool.getNumActive();
+        boolean result = clientWrapper != null && clientWrapper.validate();
+        LOGGER.debug("isConnected(host={}, port={}, user={}) -> {}", host, port, user, result);
+        return result;
     }
 
     /**
@@ -75,15 +74,14 @@ public abstract class AbstractConfig<W extends ClientWrapper> {
      *            exist.
      * @param filename
      *            File name on remote system.
-     *            
+     * 
      * @return Stream to which content for the remote file has to be written.
      * 
-     * @throws Exception 
-     *         Anything wrong in low level ftp/sftp libraries.
+     * @throws Exception
+     *             Anything wrong in low level ftp/sftp libraries.
      */
     public OutputStream getOutputStream(String directory, String filename) throws Exception {
-        final W client = clientPool.borrowObject();
-        return client.getOutputStream(directory, filename);
+        return clientWrapper.getOutputStream(directory, filename);
     }
 
     /**
@@ -100,8 +98,7 @@ public abstract class AbstractConfig<W extends ClientWrapper> {
      */
     public InputStream getInputStream(String directory, String filename, Consumer<ClientWrapper> onClose)
             throws Exception {
-        final W client = clientPool.borrowObject();
-        return client.getInputStream(directory, filename, onClose == null ? DO_NOTHING_CONSUMER : onClose);
+        return clientWrapper.getInputStream(directory, filename, onClose == null ? DO_NOTHING_CONSUMER : onClose);
     }
 
     /**
@@ -111,45 +108,19 @@ public abstract class AbstractConfig<W extends ClientWrapper> {
      *            Directory on remote system.
      * @param filename
      *            File name on remote system.
-     * @throws Exception 
-     *         Anything wrong in low level ftp/sftp libraries.
      */
-    public void delete(String directory, String filename) throws Exception {
-        final W client = clientPool.borrowObject();
-        try {
-            client.delete(directory, filename);
-            clientPool.returnObject(client);
-        } catch (Exception e) {
-            clientPool.invalidateObject(client);
-            throw e;
-        }
+    public void delete(String directory, String filename) throws IOException {
+        clientWrapper.delete(directory, filename);
     }
 
     public List<RemoteFile> list(String directory) throws Exception {
-        final W client = clientPool.borrowObject();
-        List<RemoteFile> fileList;
-        try {
-            fileList = client.list(directory);
-            clientPool.returnObject(client);
-        } catch (Exception e) {
-            clientPool.invalidateObject(client);
-            throw e;
-        }
-        return fileList;
+        return clientWrapper.list(directory);
     }
 
-    public void rename(String originalDirectory, String originalFilename, String newFilename)
-            throws Exception {
-        final W client = clientPool.borrowObject();
-        try {
-            client.changeWorkingDirectory(originalDirectory, false);
-            String toCompletePath = ClientWrapper.normalize(newFilename);
-            client.move(originalFilename, toCompletePath);
-            clientPool.returnObject(client);
-        } catch (Exception e) {
-            clientPool.invalidateObject(client);
-            throw e;
-        }
+    public void rename(String originalDirectory, String originalFilename, String newFilename) throws Exception {
+        clientWrapper.changeWorkingDirectory(originalDirectory, false);
+        String toCompletePath = ClientWrapper.normalize(newFilename);
+        clientWrapper.move(originalFilename, toCompletePath);
     }
 
     public static String createCompletePath(String directory, String filename) {

@@ -154,7 +154,7 @@ public class FtpPollWithArchivingTest extends AbstractFtpClientTest {
             boolean streaming) throws IOException {
         assertEquals(4, message.getPropertyNames(PropertyScope.INBOUND).size());
         System.out.println(message.getPropertyNames(PropertyScope.INBOUND));
-        assertEquals(length, message.getInboundProperty("fileSize"));
+        assertEquals(length, (long)message.getInboundProperty("fileSize"));
         assertEquals(originalFilename, message.getInboundProperty("originalFilename"));
         assertEquals(filename, message.getInboundProperty("filename"));
         assertNotNull(message.getInboundProperty("timestamp"));

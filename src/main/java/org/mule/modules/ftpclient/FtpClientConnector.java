@@ -44,7 +44,7 @@ public class FtpClientConnector {
     private MuleContext muleContext;
 
     @Config
-    private AbstractConfig<?> config;
+    private AbstractConfig config;
 
     /**
      * Poll a remote directory. The following inboundProperties will be set:
@@ -429,11 +429,11 @@ public class FtpClientConnector {
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends AbstractConfig<?>> T getConfig() {
+    public <T extends AbstractConfig> T getConfig() {
         return (T) config;
     }
 
-    public void setConfig(AbstractConfig<?> config) {
+    public void setConfig(AbstractConfig config) {
         this.config = config;
     }
 

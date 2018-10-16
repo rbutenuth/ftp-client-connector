@@ -16,10 +16,8 @@ import java.util.function.Consumer;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.pool.impl.GenericObjectPool;
 import org.mule.api.ConnectionException;
 import org.mule.api.ConnectionExceptionCode;
-import org.mule.model.streaming.CallbackOutputStream;
 import org.mule.modules.ftpclient.AutoCloseOnEOFInputStream;
 import org.mule.modules.ftpclient.AutoCloseOnEOFInputStream.ConsumerWithIOException;
 import org.mule.modules.ftpclient.ClientWrapper;
@@ -42,11 +40,9 @@ public class SftpClientWrapper extends ClientWrapper {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SftpClientWrapper.class);
 
-    private GenericObjectPool<SftpClientWrapper> pool;
     private ChannelSftp channel;
 
-    public SftpClientWrapper(GenericObjectPool<SftpClientWrapper> pool, ChannelSftp channel) {
-        this.pool = pool;
+    public SftpClientWrapper(ChannelSftp channel) {
         this.channel = channel;
     }
 
@@ -69,59 +65,25 @@ public class SftpClientWrapper extends ClientWrapper {
     @Override
     public OutputStream getOutputStream(String directory, String filename) throws IOException, SftpException {
         changeWorkingDirectory(directory, true);
-        try {
-            OutputStream out = channel.put(filename);
-            return new CallbackOutputStream(out, new CallbackOutputStream.Callback() {
-                boolean closed = false;
-
-                @Override
-                public void onClose() {
-                    if (!closed) {
-                        closed = true;
-                        try {
-                            pool.returnObject(SftpClientWrapper.this);
-                        } catch (Exception e) {
-                            LOGGER.debug("ignore exception in cleanup", e);
-                        }
-                    }
-                }
-            });
-
-        } catch (RuntimeException | SftpException e) {
-            try {
-                pool.returnObject(this);
-            } catch (Exception e2) {
-                LOGGER.error("Error returning " + this + " to pool " + pool + " while another exception occured", e2);
-            }
-            throw e;
-        }
+        OutputStream out = channel.put(filename);
+        return out;
     }
 
     @Override
     public InputStream getInputStream(final String directory, final String filename,
             final Consumer<ClientWrapper> onClose) throws SftpException, IOException {
         changeWorkingDirectory(directory, false);
-        try {
-            final InputStream is = channel.get(filename);
-            return new AutoCloseOnEOFInputStream(is, new ConsumerWithIOException() {
-                @Override
-                public void apply() {
-                    try {
-                        onClose.accept(SftpClientWrapper.this);
-                        pool.returnObject(SftpClientWrapper.this);
-                    } catch (Exception e) {
-                        LOGGER.debug("ignore exception in cleanup", e);
-                    }
+        final InputStream is = channel.get(filename);
+        return new AutoCloseOnEOFInputStream(is, new ConsumerWithIOException() {
+            @Override
+            public void apply() {
+                try {
+                    onClose.accept(SftpClientWrapper.this);
+                } catch (Exception e) {// signature is from commons.pool NOSONAR
+                    LOGGER.debug("ignore exception in cleanup", e);
                 }
-            });
-        } catch (RuntimeException | SftpException e) {
-            try {
-                pool.returnObject(this);
-            } catch (Exception e2) {
-                LOGGER.error("Error returning " + this + " to pool " + pool + " while another exception occured", e2);
             }
-            throw e;
-        }
+        });
     }
 
     @Override
@@ -316,7 +278,6 @@ public class SftpClientWrapper extends ClientWrapper {
     private IOException invalidate(IOException ioe) {
         try {
             destroy();
-            pool.invalidateObject(this);
         } catch (Exception e) {
             LOGGER.error("ignore on cleanup", e);
         }

@@ -3,9 +3,9 @@ package org.mule.modules.ftpclient.config;
 import java.io.IOException;
 import java.net.UnknownHostException;
 
+import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPReply;
-import org.apache.commons.pool.impl.GenericObjectPool;
 import org.mule.api.ConnectionException;
 import org.mule.api.ConnectionExceptionCode;
 import org.mule.api.annotations.Configurable;
@@ -16,11 +16,10 @@ import org.mule.api.annotations.display.Password;
 import org.mule.api.annotations.display.Placement;
 import org.mule.api.annotations.param.ConnectionKey;
 import org.mule.api.annotations.param.Default;
-import org.mule.modules.ftpclient.ftp.FtpClientFactory;
 import org.mule.modules.ftpclient.ftp.FtpClientWrapper;
 
 @ConnectionManagement(configElementName = "ftp-config", friendlyName = "Ftp Configuration")
-public class FtpConfig extends AbstractConfig<FtpClientWrapper> {
+public class FtpConfig extends AbstractConfig {
     @Configurable
     @Password
     @Placement(order = 2, group = "Connection")
@@ -36,16 +35,45 @@ public class FtpConfig extends AbstractConfig<FtpClientWrapper> {
     @Default("true")
     private boolean passiveMode = true;
 
-    @SuppressWarnings("unused") // ConnectionException
     @Connect
     public void connect(
             @SuppressWarnings("hiding") @Placement(order = 1, group = "Connection") @ConnectionKey String user)
             throws ConnectionException {
+        LOGGER.debug("connect, host={}, port={}, user={}", host, port, user);
         this.user = user;
-        FtpClientFactory factory = new FtpClientFactory(host, port, transferMode, passiveMode, user, password);
-        clientPool = new GenericObjectPool<>(factory);
-        clientPool.setTestOnBorrow(true);
-        factory.setPool(clientPool);
+        FTPClient client = null;
+        boolean ready = false;
+        try {
+            client = createConnectedClient();
+            switch (transferMode) {
+            case Ascii:
+                client.setFileType(FTP.ASCII_FILE_TYPE);
+                break;
+            case Binary:
+            default:
+                client.setFileType(FTP.BINARY_FILE_TYPE);
+                break;
+            }
+            if (passiveMode) {
+                client.enterLocalPassiveMode();
+            } else {
+                client.enterLocalActiveMode();
+            }
+            ready = true;
+        } catch (IOException e) {
+            throw new ConnectionException(ConnectionExceptionCode.UNKNOWN, e.getMessage(),
+                    "Could not login to ftp server", e);
+        } finally {
+            if (!ready && client != null && client.isConnected()) {
+                try {
+                    client.disconnect();
+                } catch (IOException e) {
+                    // ignore
+                }
+            }
+        }
+
+        clientWrapper = new FtpClientWrapper(client);
     }
 
     @TestConnectivity
@@ -53,44 +81,50 @@ public class FtpConfig extends AbstractConfig<FtpClientWrapper> {
             @SuppressWarnings("hiding") @Placement(order = 1, group = "Connection") @ConnectionKey String user)
             throws ConnectionException {
         this.user = user;
-        FTPClient ftp = new FTPClient();
+        FTPClient client = null;
         try {
-            try {
-                ftp.connect(host, port);
-            } catch (UnknownHostException e) {
-                throw new ConnectionException(ConnectionExceptionCode.UNKNOWN_HOST, "", "Unknown host: " + host);
-            } catch (IOException e) {
-                throw new ConnectionException(ConnectionExceptionCode.CANNOT_REACH, "",
-                        "Could not connect to ftp server: " + port + "@" + host);
-            }
-            int reply = ftp.getReplyCode();
-            if (!FTPReply.isPositiveCompletion(reply)) {
-                throw new ConnectionException(ConnectionExceptionCode.CANNOT_REACH, "",
-                        "Could not connect to ftp server: " + port + "@" + host);
-            }
-            boolean success;
-            try {
-                success = ftp.login(user, password);
-            } catch (IOException e) {
-                throw new ConnectionException(ConnectionExceptionCode.INCORRECT_CREDENTIALS, "",
-                        "Could not login to ftp server with user " + user);
-            }
-            if (!success) {
-                throw new ConnectionException(ConnectionExceptionCode.INCORRECT_CREDENTIALS, "",
-                        "Could not login to ftp server with user " + user);
-            }
-            ftp.logout();
+            client = createConnectedClient();
+            client.logout();
         } catch (IOException e) {
             throw new ConnectionException(ConnectionExceptionCode.UNKNOWN, e.getMessage(), "Unknown error");
         } finally {
-            if (ftp.isConnected()) {
+            if (client != null && client.isConnected()) {
                 try {
-                    ftp.disconnect();
+                    client.disconnect();
                 } catch (IOException ioe) {
-                    // ignore excpentions on cleanup
+                    // ignore exceptions on cleanup
                 }
             }
         }
+    }
+
+    private FTPClient createConnectedClient() throws ConnectionException {
+        FTPClient client = new FTPClient();
+        try {
+            client.connect(host, port);
+        } catch (UnknownHostException e) {
+            throw new ConnectionException(ConnectionExceptionCode.UNKNOWN_HOST, "", "Unknown host: " + host);
+        } catch (IOException e) {
+            throw new ConnectionException(ConnectionExceptionCode.CANNOT_REACH, "",
+                    "Could not connect to ftp server: " + port + "@" + host);
+        }
+        int reply = client.getReplyCode();
+        if (!FTPReply.isPositiveCompletion(reply)) {
+            throw new ConnectionException(ConnectionExceptionCode.CANNOT_REACH, "",
+                    "Could not connect to ftp server: " + port + "@" + host);
+        }
+        boolean success;
+        try {
+            success = client.login(user, password);
+        } catch (IOException e) {
+            throw new ConnectionException(ConnectionExceptionCode.INCORRECT_CREDENTIALS, "",
+                    "Could not login to ftp server with user " + user);
+        }
+        if (!success) {
+            throw new ConnectionException(ConnectionExceptionCode.INCORRECT_CREDENTIALS, "",
+                    "Could not login to ftp server with user " + user);
+        }
+        return client;
     }
 
     public String getPassword() {

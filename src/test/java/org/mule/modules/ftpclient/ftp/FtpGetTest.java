@@ -1,6 +1,11 @@
 package org.mule.modules.ftpclient.ftp;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.IOException;
@@ -9,7 +14,6 @@ import java.nio.charset.StandardCharsets;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
-import org.mule.api.ConnectionException;
 import org.mule.modules.ftpclient.FtpClientConnector;
 import org.mule.modules.ftpclient.config.TransferMode;
 
@@ -25,10 +29,9 @@ public class FtpGetTest extends AbstractFtpClientTest {
             assertNotNull("input stream", is);
             assertEquals(HELLO, IOUtils.toString(is, StandardCharsets.UTF_8));
         }
-        assertEquals(0, connector.getConfig().getActiveConnections());
     }
 
-    @Test(expected = ConnectionException.class)
+    @Test(expected = IOException.class)
     public void getFailsWhenServerStopped() throws Exception {
         FtpClientConnector connector = connectorFactory.createConnector(TransferMode.Ascii, true);
         stopFtpServer();
@@ -45,7 +48,6 @@ public class FtpGetTest extends AbstractFtpClientTest {
         } catch (IOException e) {
             // expected
         }
-        assertEquals(0, connector.getConfig().getActiveConnections());
     }
 
     @Test
@@ -58,7 +60,6 @@ public class FtpGetTest extends AbstractFtpClientTest {
             assertNotNull("input stream", is);
             assertEquals(HELLO, IOUtils.toString(is, StandardCharsets.UTF_8));
         }
-        assertEquals(0, connector.getConfig().getActiveConnections());
     }
 
     @Test
@@ -71,7 +72,6 @@ public class FtpGetTest extends AbstractFtpClientTest {
             assertNotNull("input stream", is);
             assertEquals(HELLO, IOUtils.toString(is, StandardCharsets.UTF_8));
         }
-        assertEquals(0, connector.getConfig().getActiveConnections());
     }
 
     @Test
@@ -84,7 +84,6 @@ public class FtpGetTest extends AbstractFtpClientTest {
             assertNotNull("input stream", is);
             assertEquals(HELLO, IOUtils.toString(is, StandardCharsets.UTF_8));
         }
-        assertEquals(0, connector.getConfig().getActiveConnections());
     }
 
     @Test
@@ -98,7 +97,6 @@ public class FtpGetTest extends AbstractFtpClientTest {
             assertNotNull("input stream", is);
             assertFalse(HELLO.equals(IOUtils.toString(is, StandardCharsets.UTF_8)));
         }
-        assertEquals(0, connector.getConfig().getActiveConnections());
     }
 
     @Test
@@ -114,7 +112,6 @@ public class FtpGetTest extends AbstractFtpClientTest {
             assertEquals(HELLO, IOUtils.toString(is, StandardCharsets.UTF_8));
         }
         assertTrue("file still exists", testFile.isFile());
-        assertEquals(0, connector.getConfig().getActiveConnections());
     }
 
     @Test
@@ -128,7 +125,6 @@ public class FtpGetTest extends AbstractFtpClientTest {
             byte[] read = IOUtils.toByteArray(is);
             assertArrayEquals(written, read);
         }
-        assertEquals(0, connector.getConfig().getActiveConnections());
     }
 
     @Test
@@ -139,7 +135,6 @@ public class FtpGetTest extends AbstractFtpClientTest {
         fileManager.createBinaryFile(new File(fileManager.getDirectory(), "test.bin"), written);
         byte[] read = (byte[]) connector.getFile("", "test.bin", false);
         assertArrayEquals(written, read);
-        assertEquals(0, connector.getConfig().getActiveConnections());
     }
 
     @Test
@@ -153,7 +148,6 @@ public class FtpGetTest extends AbstractFtpClientTest {
             byte[] read = IOUtils.toByteArray(is);
             assertArrayEquals(written, read);
         }
-        assertEquals(0, connector.getConfig().getActiveConnections());
     }
 
     @Test
@@ -179,6 +173,5 @@ public class FtpGetTest extends AbstractFtpClientTest {
         fileManager.createTextFile(new File(new File(baseDir, directory), "test.txt"), content);
         byte[] result = (byte[]) connector.getFile(directory, "test.txt", false);
         assertArrayEquals(content.getBytes(StandardCharsets.UTF_8), result);
-        assertEquals(0, connector.getConfig().getActiveConnections());
     }
 }

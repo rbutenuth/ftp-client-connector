@@ -68,12 +68,10 @@ public class SftpConnectionTest extends AbstractSftpClientTest {
     }
 
     @Test
-    public void configTestConnectBadHost() throws Exception {
+    public void configTestConnectBadHost() {
         try (SftpConnectorFactory f = new SftpConnectorFactory("foo.baz", port, knownHostsFile)) {
-            FtpClientConnector connector = f.createPwdUserConnector(PWD_USER_NAME, PWD_USER_PWD);
-            SftpConfig config = connector.getConfig();
             try {
-                config.testConnect(PWD_USER_NAME);
+                f.createPwdUserConnector(PWD_USER_NAME, PWD_USER_PWD);
                 fail("ConnectionException missing");
             } catch (ConnectionException e) {
                 assertEquals(ConnectionExceptionCode.UNKNOWN_HOST, e.getCode());
@@ -94,11 +92,10 @@ public class SftpConnectionTest extends AbstractSftpClientTest {
     }
 
     @Test
-    public void configConnectBadCredentials() throws Exception {
+    public void configConnectBadCredentials() {
         try (SftpConnectorFactory f = new SftpConnectorFactory("localhost", port, knownHostsFile)) {
-            FtpClientConnector connector = f.createPwdUserConnector("foo", "baz");
             try {
-                connector.getFile("", "test.txt", false);
+                f.createPwdUserConnector("foo", "baz");
                 fail("ConnectionException missing");
             } catch (ConnectionException e) {
                 assertEquals(ConnectionExceptionCode.INCORRECT_CREDENTIALS, e.getCode());
@@ -107,12 +104,10 @@ public class SftpConnectionTest extends AbstractSftpClientTest {
     }
 
     @Test
-    public void configTestConnectPrivateKeyBadPassphrase() throws Exception {
-        FtpClientConnector connector = connectorFactory.createPrivateKeyFromFileConnector(KEY_USER_NAME, identityFile,
-                KEY_USER_PASSPRHASE + "Hugo");
-        SftpConfig config = connector.getConfig();
+    public void configTestConnectPrivateKeyBadPassphrase() {
         try {
-            config.testConnect(KEY_USER_NAME);
+            connectorFactory.createPrivateKeyFromFileConnector(KEY_USER_NAME, identityFile,
+                    KEY_USER_PASSPRHASE + "Hugo");
             fail("ConnectionException missing");
         } catch (ConnectionException e) {
             assertEquals(ConnectionExceptionCode.INCORRECT_CREDENTIALS, e.getCode());
