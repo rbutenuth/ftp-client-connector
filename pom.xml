@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.codecentric.mule.modules</groupId>
 	<artifactId>ftp-client-connector</artifactId>
-	<version>1.0.1-SNAPSHOT</version>
+	<version>1.0.1</version>
 	<packaging>mule-module</packaging>
 	<name>ftp-client-connector</name>
 	<description>A Mule connector for ftp/sftp.</description>
@@ -48,7 +48,7 @@
 		<connection>scm:git:https://github.com/rbutenuth/ftp-client-connector.git</connection>
 		<developerConnection>scm:git:https://github.com/rbutenuth/ftp-client-connector.git</developerConnection>
 		<url>https://github.com/rbutenuth/ftp-client-connector</url>
-		<tag>ftp-client-connector-0.0.1</tag>
+		<tag>ftp-client-connector-1.0.1</tag>
 	</scm>
 
 	<distributionManagement>
