@@ -108,6 +108,8 @@ public abstract class AbstractConfig {
      *            Directory on remote system.
      * @param filename
      *            File name on remote system.
+     * @throws IOException
+     *            When communication with server fails. 
      */
     public void delete(String directory, String filename) throws IOException {
         clientWrapper.delete(directory, filename);
