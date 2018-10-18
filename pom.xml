@@ -170,6 +170,31 @@
 				<artifactId>maven-project-info-reports-plugin</artifactId>
 				<version>2.7</version>
 			</plugin>
+			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>copy-resources</id>
+						<phase>pre-site</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<!--
+									 default of mule-devkit-maven-plugin:3.9.5:studio-package is target\update-site
+ 									 for maven the correct site content is copied here
+							 -->
+							<outputDirectory>${basedir}/src/site/resources/update-site</outputDirectory>
+							<resources>
+								<resource>
+									<directory>target/update-site</directory>
+									<filtering>false</filtering>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 
