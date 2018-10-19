@@ -74,6 +74,7 @@ public class FtpClientConnector {
      *            Return an InputStream instead of an byte[]
      * @param callback
      *            Interface for message generation (set by Mule)
+     * @throws Exception 
      */
     @Source(friendlyName = "Poll a remote directory", primaryNodeOnly = true, sourceStrategy = SourceStrategy.POLLING, pollingPeriod = 6000)
     public void poll(//
@@ -82,7 +83,7 @@ public class FtpClientConnector {
             @FriendlyName("File to read instead of matched") @Default("") @Literal String translatedNameExpression, //
             @FriendlyName("Delete after get") @Default("false") boolean deleteAfterGet, //
             @FriendlyName("Streaming") @Default("true") boolean streaming, //
-            SourceCallback callback) throws RuntimeException { // throws needed, otherwise DevKit generates illegal code
+            SourceCallback callback) throws Exception { // throws needed, otherwise DevKit generates illegal code
 
         CompletionStrategy cs = new DeleteOrNothingStrategy(deleteAfterGet);
         handlePoll(cs, directory, filename, translatedNameExpression, streaming, callback);
@@ -120,6 +121,7 @@ public class FtpClientConnector {
      *            Return an InputStream instead of an byte[]
      * @param callback
      *            Interface for message generation (set by Mule)
+     * @throws Exception 
      */
     @Source(friendlyName = "Poll with archiving to another directory", primaryNodeOnly = true, sourceStrategy = SourceStrategy.POLLING, pollingPeriod = 6000)
     public void pollWithArchivingByMovingToDirectory(//
@@ -129,7 +131,7 @@ public class FtpClientConnector {
             @FriendlyName("Delete original file after get") @Default("false") boolean deleteAfterGet, //
             @FriendlyName("Move to Directory (relative)") String moveToDirectory, //
             @FriendlyName("Streaming") @Default("true") boolean streaming, //
-            SourceCallback callback) throws RuntimeException { // throws needed, otherwise DevKit generates illegal code
+            SourceCallback callback) throws Exception { // throws needed, otherwise DevKit generates illegal code
 
         String dir = moveToDirectory.trim();
         if (dir.endsWith("/")) {
@@ -172,6 +174,7 @@ public class FtpClientConnector {
      *            Return an InputStream instead of an byte[]
      * @param callback
      *            Interface for message generation (set by Mule)
+     * @throws Exception 
      */
     @Source(friendlyName = "Poll with archiving by renaming", primaryNodeOnly = true, sourceStrategy = SourceStrategy.POLLING, pollingPeriod = 6000)
     public void pollWithArchivingByRenaming(//
@@ -181,7 +184,7 @@ public class FtpClientConnector {
             @FriendlyName("Expression for renaming filename") @Literal String filenameExpression, //
             @FriendlyName("Expression for renaming originalFilename") @Literal String originalFilenameExpression, //
             @FriendlyName("Streaming") @Default("true") boolean streaming, //
-            SourceCallback callback) throws RuntimeException { // throws needed, otherwise DevKit generates illegal code
+            SourceCallback callback) throws Exception { // throws needed, otherwise DevKit generates illegal code
 
         CompletionStrategy cs = new RenameStrategy(muleContext, filenameExpression, originalFilenameExpression);
         handlePoll(cs, directory, filename, translatedNameExpression, streaming, callback);
@@ -192,7 +195,7 @@ public class FtpClientConnector {
             String filename, //
             String translatedNameExpression, //
             boolean streaming, //
-            SourceCallback callback) {
+            SourceCallback callback) throws Exception {
         Pattern pattern = Pattern.compile(filename);
 
         Map<String, Long> sizeMap = new HashMap<>();
@@ -220,12 +223,9 @@ public class FtpClientConnector {
             }
         }
         for (RemoteFile file : filesToHandle) {
-            try {
-                handleFile(sizeMap, directory, file, translatedNameExpression, cs, streaming, callback);
-            } catch (Exception e) {
-                logger.error("failure in polling" + file, e);
-                return;
-            }
+            logger.debug("start handling {}", file.getName());
+            handleFile(sizeMap, directory, file, translatedNameExpression, cs, streaming, callback);
+            logger.debug("finished handling {}", file.getName());
         }
     }
 
