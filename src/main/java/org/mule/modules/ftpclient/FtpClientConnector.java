@@ -15,6 +15,7 @@ import javax.inject.Inject;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.mule.DefaultMuleMessage;
+import org.mule.api.ConnectionException;
 import org.mule.api.MessagingException;
 import org.mule.api.MuleContext;
 import org.mule.api.MuleEvent;
@@ -22,6 +23,7 @@ import org.mule.api.MuleMessage;
 import org.mule.api.annotations.Config;
 import org.mule.api.annotations.Connector;
 import org.mule.api.annotations.Processor;
+import org.mule.api.annotations.ReconnectOn;
 import org.mule.api.annotations.Source;
 import org.mule.api.annotations.SourceStrategy;
 import org.mule.api.annotations.display.FriendlyName;
@@ -77,6 +79,7 @@ public class FtpClientConnector {
      * @throws Exception 
      */
     @Source(friendlyName = "Poll a remote directory", primaryNodeOnly = true, sourceStrategy = SourceStrategy.POLLING, pollingPeriod = 6000)
+    @ReconnectOn(exceptions = { Exception.class })
     public void poll(//
             @FriendlyName("Directory") @Default("") String directory, //
             @FriendlyName("Regex for filename") @Default(".*") String filename, //
@@ -124,6 +127,7 @@ public class FtpClientConnector {
      * @throws Exception 
      */
     @Source(friendlyName = "Poll with archiving to another directory", primaryNodeOnly = true, sourceStrategy = SourceStrategy.POLLING, pollingPeriod = 6000)
+    @ReconnectOn(exceptions = { Exception.class })
     public void pollWithArchivingByMovingToDirectory(//
             @FriendlyName("Directory") @Default("") String directory, //
             @FriendlyName("Regex for filename") @Default(".*") String filename, //
@@ -177,6 +181,7 @@ public class FtpClientConnector {
      * @throws Exception 
      */
     @Source(friendlyName = "Poll with archiving by renaming", primaryNodeOnly = true, sourceStrategy = SourceStrategy.POLLING, pollingPeriod = 6000)
+    @ReconnectOn(exceptions = { Exception.class })
     public void pollWithArchivingByRenaming(//
             @FriendlyName("Directory") @Default("") String directory, //
             @FriendlyName("Regex for filename") @Default(".*") String filename, //
@@ -323,6 +328,7 @@ public class FtpClientConnector {
      *         Anything wrong in low level ftp/sftp libraries.
      */
     @Processor
+    @ReconnectOn(exceptions = { ConnectionException.class })
     public Object putFile(@FriendlyName("Directory") @Default("") String directory, //
             @FriendlyName("File name") String filename, //
             @Default("#[payload]") @FriendlyName("File content") Object content, //
@@ -369,6 +375,7 @@ public class FtpClientConnector {
      *         Anything wrong in low level ftp/sftp libraries.
      */
     @Processor
+    @ReconnectOn(exceptions = { ConnectionException.class })
     public Object getFile(@FriendlyName("Directory") @Default("") final String directory, //
             @FriendlyName("File name") final String filename, //
             @FriendlyName("Streaming") @Default("true") boolean streaming) throws Exception {
@@ -392,6 +399,7 @@ public class FtpClientConnector {
      *             Anything wrong in low level ftp/sftp libraries.
      */
     @Processor
+    @ReconnectOn(exceptions = { ConnectionException.class })
     public void delete(@FriendlyName("Directory") @Default("") String directory, //
             @FriendlyName("File name") String filename) throws Exception {
         config.delete(directory, filename);
@@ -405,6 +413,7 @@ public class FtpClientConnector {
      *             Anything wrong in low level ftp/sftp libraries.
      */
     @Processor
+    @ReconnectOn(exceptions = { ConnectionException.class })
     public Collection<RemoteFile> list(@FriendlyName("Directory") @Default("") String directory) throws Exception {
         return config.list(directory);
     }
@@ -422,6 +431,7 @@ public class FtpClientConnector {
      *         Anything wrong in low level ftp/sftp libraries.
      */
     @Processor
+    @ReconnectOn(exceptions = { ConnectionException.class })
     public void rename(@FriendlyName("Original directory") @Default("") String originalDirectory, //
             @FriendlyName("Original file name") String originalFilename,
             @FriendlyName("New file name (with relative directory)") String newFilename) throws Exception {
