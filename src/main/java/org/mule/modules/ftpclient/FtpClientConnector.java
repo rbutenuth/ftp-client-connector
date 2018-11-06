@@ -1,5 +1,6 @@
 package org.mule.modules.ftpclient;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -37,6 +38,9 @@ import org.mule.modules.ftpclient.config.AbstractConfig;
 import org.mule.transport.NullPayload;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.jcraft.jsch.JSchException;
+import com.jcraft.jsch.SftpException;
 
 @Connector(name = "ftp-client", friendlyName = "FTP/SFTP")
 public class FtpClientConnector {
@@ -79,7 +83,7 @@ public class FtpClientConnector {
 	 * @throws Exception
 	 */
 	@Source(friendlyName = "Poll a remote directory", primaryNodeOnly = true, sourceStrategy = SourceStrategy.POLLING, pollingPeriod = 6000)
-	@ReconnectOn(exceptions = { Exception.class })
+	@ReconnectOn(exceptions = { ConnectionException.class, IOException.class, JSchException.class, SftpException.class })
 	public void poll(//
 			@FriendlyName("Directory") @Default("") String directory, //
 			@FriendlyName("Regex for filename") @Default(".*") String filename, //
@@ -127,7 +131,7 @@ public class FtpClientConnector {
 	 * @throws Exception
 	 */
 	@Source(friendlyName = "Poll with archiving to another directory", primaryNodeOnly = true, sourceStrategy = SourceStrategy.POLLING, pollingPeriod = 6000)
-	@ReconnectOn(exceptions = { Exception.class })
+        @ReconnectOn(exceptions = { ConnectionException.class, IOException.class, JSchException.class, SftpException.class })
 	public void pollWithArchivingByMovingToDirectory(//
 			@FriendlyName("Directory") @Default("") String directory, //
 			@FriendlyName("Regex for filename") @Default(".*") String filename, //
@@ -181,7 +185,7 @@ public class FtpClientConnector {
 	 * @throws Exception
 	 */
 	@Source(friendlyName = "Poll with archiving by renaming", primaryNodeOnly = true, sourceStrategy = SourceStrategy.POLLING, pollingPeriod = 6000)
-	@ReconnectOn(exceptions = { Exception.class })
+        @ReconnectOn(exceptions = { ConnectionException.class, IOException.class, JSchException.class, SftpException.class })
 	public void pollWithArchivingByRenaming(//
 			@FriendlyName("Directory") @Default("") String directory, //
 			@FriendlyName("Regex for filename") @Default(".*") String filename, //
