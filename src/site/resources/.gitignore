@@ -1,0 +1,5 @@
+# for maven the correct site content is copied here
+# default of mule-devkit-maven-plugin:3.9.5:studio-package is target\update-site
+# see /pom.xml
+
+/update-site/
