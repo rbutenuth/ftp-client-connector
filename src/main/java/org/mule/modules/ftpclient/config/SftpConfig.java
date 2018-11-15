@@ -11,6 +11,7 @@ import org.mule.api.annotations.display.FriendlyName;
 import org.mule.api.annotations.display.Password;
 import org.mule.api.annotations.display.Placement;
 import org.mule.api.annotations.param.ConnectionKey;
+import org.mule.api.annotations.param.Default;
 import org.mule.api.annotations.param.Optional;
 import org.mule.modules.ftpclient.sftp.SftpClientWrapper;
 import org.mule.modules.ftpclient.sftp.UnrestrictedCryptographyEnabler;
@@ -23,129 +24,136 @@ import com.jcraft.jsch.JSchException;
 @ConnectionManagement(configElementName = "sftp-config", friendlyName = "Sftp Configuration")
 public class SftpConfig extends AbstractConfig {
 
-    @Configurable
-    @Placement(order = 3, group = "Server")
-    @Optional
-    @FriendlyName("Known Hosts File")
-    protected String knownHostsFile;
+	@Configurable
+	@Placement(order = 3, group = "Server")
+	@Optional
+	@FriendlyName("Known Hosts File")
+	protected String knownHostsFile;
 
-    @Configurable
-    @Password
-    @Optional
-    @Placement(order = 1, group = "Password")
-    private String password;
+	@Configurable
+	@Placement(order = 3, group = "Server")
+	@Optional
+	@Default("10_000")
+	@FriendlyName("Connection Timeout")
+	private int timeout;
 
-    @Configurable
-    @Optional
-    @Placement(order = 1, group = "Public/Private Key")
-    @FriendlyName("Identity File")
-    private String identityFile;
+	@Configurable
+	@Password
+	@Optional
+	@Placement(order = 1, group = "Password")
+	private String password;
 
-    @Configurable
-    @Optional
-    @Placement(order = 2, group = "Public/Private Key")
-    @FriendlyName("Identity Classpath Resource")
-    private String identityResource;
+	@Configurable
+	@Optional
+	@Placement(order = 1, group = "Public/Private Key")
+	@FriendlyName("Identity File")
+	private String identityFile;
 
-    @Configurable
-    @Password
-    @Optional
-    @Placement(order = 3, group = "Public/Private Key")
-    @FriendlyName("Passphrase")
-    private String passphrase;
+	@Configurable
+	@Optional
+	@Placement(order = 2, group = "Public/Private Key")
+	@FriendlyName("Identity Classpath Resource")
+	private String identityResource;
 
-    private JSch jsch = new JSch();
+	@Configurable
+	@Password
+	@Optional
+	@Placement(order = 3, group = "Public/Private Key")
+	@FriendlyName("Passphrase")
+	private String passphrase;
 
-    public SftpConfig() {
-        UnrestrictedCryptographyEnabler.enable();
-    }
+	private JSch jsch = new JSch();
 
-    @Connect
-    public void connect(
-            @SuppressWarnings("hiding") @Placement(order = 1, group = "Connection") @ConnectionKey String user)
-            throws ConnectionException {
-        LOGGER.debug("connect, host={}, port={}, user={}", host, port, user);
-        this.user = user;
-        if (StringUtils.isNotEmpty(identityFile) && StringUtils.isNotEmpty(identityResource)) {
-            throw new ConnectionException(ConnectionExceptionCode.UNKNOWN, "",
-                    "Don't specifiy Identity File and Identity Classpath Resource");
-        }
-        ChannelSftp channel;
-        if (StringUtils.isNotBlank(identityFile) || StringUtils.isNotBlank(identityResource)) {
-            channel = SftpClientWrapper.createChannel(jsch, host, port, knownHostsFile, user, identityFile,
-                    identityResource, passphrase);
-        } else {
-            channel = SftpClientWrapper.createChannel(jsch, host, port, knownHostsFile, user, password);
-        }
-        try {
-            channel.connect();
-        } catch (JSchException e) {
-            throw new ConnectionException(ConnectionExceptionCode.UNKNOWN, e.getMessage(), e.getMessage(), e);
-        }
-        clientWrapper = new SftpClientWrapper(channel);
-    }
+	public SftpConfig() {
+		UnrestrictedCryptographyEnabler.enable();
+	}
 
-    @TestConnectivity
-    public void testConnect(
-            @SuppressWarnings("hiding") @Placement(order = 1, group = "Connection") @ConnectionKey String user)
-            throws ConnectionException {
-        this.user = user;
-        if (StringUtils.isNotEmpty(identityFile) && StringUtils.isNotEmpty(identityResource)) {
-            throw new ConnectionException(ConnectionExceptionCode.UNKNOWN, "",
-                    "Don't specifiy Identity File and Identity Classpath Resource");
-        }
-        try {
-            Channel channel;
-            if (StringUtils.isNotBlank(identityFile) || StringUtils.isNotBlank(identityResource)) {
-                channel = SftpClientWrapper.createChannel(jsch, host, port, knownHostsFile, user, identityFile,
-                        identityResource, passphrase);
-            } else {
-                channel = SftpClientWrapper.createChannel(jsch, host, port, knownHostsFile, user, password);
-            }
-            channel.connect();
-            channel.disconnect();
-        } catch (JSchException e) {
-            SftpClientWrapper.translateException(e, host, port, user);
-        }
-    }
+	@Connect
+	public void connect(@SuppressWarnings("hiding") @Placement(order = 1, group = "Connection") @ConnectionKey String user) throws ConnectionException {
+		LOGGER.debug("connect, host={}, port={}, user={}", host, port, user);
+		this.user = user;
+		if (StringUtils.isNotEmpty(identityFile) && StringUtils.isNotEmpty(identityResource)) {
+			throw new ConnectionException(ConnectionExceptionCode.UNKNOWN, "", "Don't specifiy Identity File and Identity Classpath Resource");
+		}
+		ChannelSftp channel;
+		if (StringUtils.isNotBlank(identityFile) || StringUtils.isNotBlank(identityResource)) {
+			channel = SftpClientWrapper.createChannel(jsch, host, port, timeout, knownHostsFile, user, identityFile, identityResource, passphrase);
+		} else {
+			channel = SftpClientWrapper.createChannel(jsch, host, port, timeout, knownHostsFile, user, password);
+		}
+		try {
+			channel.connect();
+		} catch (JSchException e) {
+			throw new ConnectionException(ConnectionExceptionCode.UNKNOWN, e.getMessage(), e.getMessage(), e);
+		}
+		clientWrapper = new SftpClientWrapper(channel);
+	}
 
-    public String getKnownHostsFile() {
-        return knownHostsFile;
-    }
+	@TestConnectivity
+	public void testConnect(@SuppressWarnings("hiding") @Placement(order = 1, group = "Connection") @ConnectionKey String user) throws ConnectionException {
+		this.user = user;
+		if (StringUtils.isNotEmpty(identityFile) && StringUtils.isNotEmpty(identityResource)) {
+			throw new ConnectionException(ConnectionExceptionCode.UNKNOWN, "", "Don't specifiy Identity File and Identity Classpath Resource");
+		}
+		try {
+			Channel channel;
+			if (StringUtils.isNotBlank(identityFile) || StringUtils.isNotBlank(identityResource)) {
+				channel = SftpClientWrapper.createChannel(jsch, host, port, timeout, knownHostsFile, user, identityFile, identityResource, passphrase);
+			} else {
+				channel = SftpClientWrapper.createChannel(jsch, host, port, timeout, knownHostsFile, user, password);
+			}
+			channel.connect();
+			channel.disconnect();
+		} catch (JSchException e) {
+			SftpClientWrapper.translateException(e, host, port, user);
+		}
+	}
 
-    public void setKnownHostsFile(String knownHostsFile) {
-        this.knownHostsFile = knownHostsFile;
-    }
+	public String getKnownHostsFile() {
+		return knownHostsFile;
+	}
 
-    public String getPassword() {
-        return password;
-    }
+	public void setKnownHostsFile(String knownHostsFile) {
+		this.knownHostsFile = knownHostsFile;
+	}
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+	public int getTimeout() {
+		return timeout;
+	}
 
-    public String getIdentityFile() {
-        return identityFile;
-    }
+	public void setTimeout(int timeout) {
+		this.timeout = timeout;
+	}
 
-    public void setIdentityFile(String identityFile) {
-        this.identityFile = identityFile;
-    }
+	public String getPassword() {
+		return password;
+	}
 
-    public String getIdentityResource() {
-        return identityResource;
-    }
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
-    public void setIdentityResource(String identityResource) {
-        this.identityResource = identityResource;
-    }
+	public String getIdentityFile() {
+		return identityFile;
+	}
 
-    public String getPassphrase() {
-        return passphrase;
-    }
+	public void setIdentityFile(String identityFile) {
+		this.identityFile = identityFile;
+	}
 
-    public void setPassphrase(String passphrase) {
-        this.passphrase = passphrase;
-    }
+	public String getIdentityResource() {
+		return identityResource;
+	}
+
+	public void setIdentityResource(String identityResource) {
+		this.identityResource = identityResource;
+	}
+
+	public String getPassphrase() {
+		return passphrase;
+	}
+
+	public void setPassphrase(String passphrase) {
+		this.passphrase = passphrase;
+	}
 }
