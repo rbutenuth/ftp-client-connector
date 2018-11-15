@@ -11,7 +11,6 @@ import org.mule.api.annotations.display.FriendlyName;
 import org.mule.api.annotations.display.Password;
 import org.mule.api.annotations.display.Placement;
 import org.mule.api.annotations.param.ConnectionKey;
-import org.mule.api.annotations.param.Default;
 import org.mule.api.annotations.param.Optional;
 import org.mule.modules.ftpclient.sftp.SftpClientWrapper;
 import org.mule.modules.ftpclient.sftp.UnrestrictedCryptographyEnabler;
@@ -29,13 +28,6 @@ public class SftpConfig extends AbstractConfig {
 	@Optional
 	@FriendlyName("Known Hosts File")
 	protected String knownHostsFile;
-
-	@Configurable
-	@Placement(order = 3, group = "Server")
-	@Optional
-	@Default("10_000")
-	@FriendlyName("Connection Timeout")
-	private int timeout;
 
 	@Configurable
 	@Password
@@ -115,14 +107,6 @@ public class SftpConfig extends AbstractConfig {
 
 	public void setKnownHostsFile(String knownHostsFile) {
 		this.knownHostsFile = knownHostsFile;
-	}
-
-	public int getTimeout() {
-		return timeout;
-	}
-
-	public void setTimeout(int timeout) {
-		this.timeout = timeout;
 	}
 
 	public String getPassword() {
