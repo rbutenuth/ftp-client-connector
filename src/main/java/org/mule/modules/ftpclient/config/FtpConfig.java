@@ -98,7 +98,7 @@ public class FtpConfig extends AbstractConfig {
 		client.setConnectTimeout(timeout);
 		try {
 			client.connect(host, port);
-			client.setSoTimeout(timeout);
+			client.setDataTimeout(timeout);
 		} catch (UnknownHostException e) {
 			throw new ConnectionException(ConnectionExceptionCode.UNKNOWN_HOST, "", "Unknown host: " + host);
 		} catch (IOException e) {
