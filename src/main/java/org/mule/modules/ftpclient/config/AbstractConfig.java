@@ -36,7 +36,7 @@ public abstract class AbstractConfig {
 	@Configurable
 	@Placement(order = 3, group = "Server")
 	@Optional
-	@Default("10_000")
+	@Default("10000")
 	@FriendlyName("Connection Timeout")
 	protected int timeout;
 

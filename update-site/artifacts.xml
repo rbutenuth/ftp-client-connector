@@ -2,7 +2,7 @@
 <?artifactRepository version='1.1.0'?>
 <repository name='file:/C:/java/mule/workspace/ftp-client-connector/target/update-site/ - artifacts' type='org.eclipse.equinox.p2.artifact.repository.simpleRepository' version='1'>
   <properties size='2'>
-    <property name='p2.timestamp' value='1541516134549'/>
+    <property name='p2.timestamp' value='1542305914370'/>
     <property name='p2.compressed' value='false'/>
   </properties>
   <mappings size='3'>
@@ -11,19 +11,19 @@
     <rule filter='(&amp; (classifier=org.eclipse.update.feature))' output='${repoUrl}/features/${id}_${version}.jar'/>
   </mappings>
   <artifacts size='2'>
-    <artifact classifier='org.eclipse.update.feature' id='org.mule.tooling.ui.extension.ftp-client-connector.3.5.0' version='1.0.6.201811061554'>
+    <artifact classifier='org.eclipse.update.feature' id='org.mule.tooling.ui.extension.ftp-client-connector.3.5.0' version='1.0.7.201811151917'>
       <properties size='4'>
         <property name='artifact.size' value='4656'/>
         <property name='download.size' value='4656'/>
-        <property name='download.md5' value='bcbfcee9547b418eb324b0b18030dab5'/>
+        <property name='download.md5' value='7f1a5c7c4837a765631fcc161cead4dd'/>
         <property name='download.contentType' value='application/zip'/>
       </properties>
     </artifact>
-    <artifact classifier='osgi.bundle' id='org.mule.tooling.ui.contribution.ftp-client.3.5.0' version='1.0.6.201811061554'>
+    <artifact classifier='osgi.bundle' id='org.mule.tooling.ui.contribution.ftp-client.3.5.0' version='1.0.7.201811151917'>
       <properties size='3'>
-        <property name='artifact.size' value='661206'/>
-        <property name='download.size' value='661206'/>
-        <property name='download.md5' value='73165c6587c2b992c7ffafc993508fb0'/>
+        <property name='artifact.size' value='665267'/>
+        <property name='download.size' value='665267'/>
+        <property name='download.md5' value='2a780cdb3942576afbacb2d23bfb133d'/>
       </properties>
     </artifact>
   </artifacts>
