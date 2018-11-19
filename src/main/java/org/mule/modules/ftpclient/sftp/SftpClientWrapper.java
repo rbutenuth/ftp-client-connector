@@ -198,7 +198,7 @@ public class SftpClientWrapper extends ClientWrapper {
 			session.setPort(port);
 			session.setPassword(password);
 			session.setTimeout(timeout);
-			session.connect();
+			session.connect(timeout);
 			return (ChannelSftp) session.openChannel(CHANNEL_SFTP);
 		} catch (JSchException e) {
 			translateException(e, host, port, user);
@@ -221,7 +221,7 @@ public class SftpClientWrapper extends ClientWrapper {
 			session.setConfig(props);
 			session.setPort(port);
 			session.setTimeout(timeout);
-			session.connect();
+			session.connect(timeout);
 			return (ChannelSftp) session.openChannel(CHANNEL_SFTP);
 		} catch (JSchException e) {
 			translateException(e, host, port, user);
