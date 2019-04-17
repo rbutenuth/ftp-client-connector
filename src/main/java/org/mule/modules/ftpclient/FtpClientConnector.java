@@ -131,7 +131,7 @@ public class FtpClientConnector {
 	 * @throws Exception
 	 */
 	@Source(friendlyName = "Poll with archiving to another directory", primaryNodeOnly = true, sourceStrategy = SourceStrategy.POLLING, pollingPeriod = 6000)
-        @ReconnectOn(exceptions = { ConnectionException.class, IOException.class, JSchException.class, SftpException.class })
+	@ReconnectOn(exceptions = { ConnectionException.class, IOException.class, JSchException.class, SftpException.class })
 	public void pollWithArchivingByMovingToDirectory(//
 			@FriendlyName("Directory") @Default("") String directory, //
 			@FriendlyName("Regex for filename") @Default(".*") String filename, //
@@ -185,13 +185,13 @@ public class FtpClientConnector {
 	 * @throws Exception
 	 */
 	@Source(friendlyName = "Poll with archiving by renaming", primaryNodeOnly = true, sourceStrategy = SourceStrategy.POLLING, pollingPeriod = 6000)
-        @ReconnectOn(exceptions = { ConnectionException.class, IOException.class, JSchException.class, SftpException.class })
+	@ReconnectOn(exceptions = { ConnectionException.class, IOException.class, JSchException.class, SftpException.class })
 	public void pollWithArchivingByRenaming(//
 			@FriendlyName("Directory") @Default("") String directory, //
 			@FriendlyName("Regex for filename") @Default(".*") String filename, //
 			@FriendlyName("File to read instead of matched") @Default("") @Literal String translatedNameExpression, //
 			@FriendlyName("Expression for renaming filename") @Literal String filenameExpression, //
-			@FriendlyName("Expression for renaming originalFilename") @Literal String originalFilenameExpression, //
+			@FriendlyName("Expression for renaming originalFilename") @Default("") @Literal String originalFilenameExpression, //
 			@FriendlyName("Streaming") @Default("true") boolean streaming, //
 			SourceCallback callback) throws Exception { // throws needed, otherwise DevKit generates illegal code
 
