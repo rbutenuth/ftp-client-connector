@@ -24,7 +24,7 @@ This can be avoided by a simple pattern:
 
 On the "reading side", you have to wait for the "done-file" and then read the original file. This can be achieved with `translatedNameExpression`.
 In `filename`, specify a regular expression matching the file with "done" suffix. In `translatedNameExpression` specify a MEL expression which
-removes the suffix, in this case: `#[message.inboundProperties.originalFilename.toString().replace(".done", "")]` . The ftp connector
+removes the suffix, in this case: `#[message.inboundProperties.originalFilename.toString().replace('.done', '')]` . The ftp connector
 will start reading when both files are there. (When there is only a "done file" but the "real file" is missing, a warning is written to the log.)
 
 ## File Completion Handling
@@ -47,3 +47,19 @@ After processing, the processed file and/or the "ok-file" are renamed within the
 Use MEL expressions named originalFilenameExpression and filenameExpression for renaming. 
 In case the expressions evaluate to null or an empty String, the files will be deleted.
 
+## Example
+
+## Read .txt files and rename to .txt.done
+
+The following example reads all files ending with ".txt", therefore the regular expression ".*\.txt"  (note the backspace for escaping the dot in the filename). The filenameExpression contains a MEL expression to add ".done" to the originalFilename for renaming. Note you have to do the string concatanetion within the MEL expression, you can't add string content after the closing bracket.
+
+Even when you are not using "ok files", you have to give an expression for renaming the original filename. Here it is a MEL expression returning an empty string. (In the future this attribute will be made optional.)
+
+```XML
+<ftp-client:poll-with-archiving-by-renaming config-ref="Ftp_Configuration" doc:name="FTP" 
+	directory="/"  
+	pollingPeriod="10000" 
+	filename=".*\.txt" 
+	filenameExpression="#[message.inboundProperties.originalFilename + '.done']" 
+	originalFilenameExpression="#['']"/>
+```
