@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.codecentric.mule.modules</groupId>
 	<artifactId>ftp-client-connector</artifactId>
-	<version>1.0.7-SNAPSHOT</version>
+	<version>1.0.9-SNAPSHOT</version>
 	<packaging>mule-module</packaging>
 	<name>ftp-client-connector</name>
 	<description>A Mule connector for ftp/sftp.</description>
@@ -107,19 +107,11 @@
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.10.4</version>
+				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
-					<excludePackageNames>org.mule.modules.ftpclient.generated.*</excludePackageNames>
+					<source>${maven.compiler.source}</source>
+					<target>${maven.compiler.target}</target>
 				</configuration>
-				<executions>
-					<execution>
-						<id>attach-javadocs</id>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-					</execution>
-				</executions>
 			</plugin>
 			<plugin>
 				<groupId>org.sonatype.plugins</groupId>
